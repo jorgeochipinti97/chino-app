@@ -222,6 +222,8 @@ export const QuizView: React.FC<QuizViewProps> = ({
                 badgeClasses = "bg-emerald-500 text-white font-bold border-transparent";
               }
 
+              const isChineseOption = /[\u4e00-\u9fa5]/.test(option);
+
               return (
                 <div
                   key={idx}
@@ -240,6 +242,21 @@ export const QuizView: React.FC<QuizViewProps> = ({
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
+                    {/* Audio button ONLY when option is in Chinese */}
+                    {isChineseOption && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          speakChinese(option);
+                        }}
+                        className="p-2 rounded-xl bg-bg-card hover:bg-bg-tertiary text-text-muted hover:text-emerald-500 border border-border transition-all duration-200 shrink-0 cursor-pointer shadow-sm active:scale-95"
+                        title="Escuchar pronunciación"
+                      >
+                        <Volume2 className="w-3.5 h-3.5 text-emerald-500" />
+                      </button>
+                    )}
+
                     {isAnswered && isCorrectOption && (
                       <div className="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-sm shrink-0">
                         <Check className="w-4 h-4 stroke-[3]" />
