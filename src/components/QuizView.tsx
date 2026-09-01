@@ -170,40 +170,11 @@ export const QuizView: React.FC<QuizViewProps> = ({
             </div>
           </div>
 
-          {/* Question Title & Pronunciation Hero */}
-          <div className="space-y-4 pt-1">
+          {/* Question Title */}
+          <div className="pt-1">
             <h2 className="text-lg sm:text-xl font-bold text-foreground leading-snug">
               {currentQuestion.question}
             </h2>
-
-            {/* Character Showcase Card with Audio */}
-            {(currentQuestion.hanzi || currentQuestion.pinyin) && (
-              <div className="flex items-center justify-between p-3.5 rounded-2xl bg-bg-secondary border border-border">
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl font-chinese font-bold text-emerald-600 dark:text-emerald-400">
-                    {currentQuestion.hanzi}
-                  </span>
-                  {currentQuestion.pinyin && (
-                    <span className="text-xs font-semibold text-text-secondary">
-                      [{currentQuestion.pinyin}]
-                    </span>
-                  )}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    speakChinese(
-                      currentQuestion.hanzi || currentQuestion.pinyin || currentQuestion.correct_answer
-                    )
-                  }
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-bg-card hover:bg-bg-tertiary border border-border text-foreground hover:border-emerald-500/50 text-xs font-bold transition-all duration-200 min-h-[38px] shadow-sm tactile-btn cursor-pointer"
-                >
-                  <Volume2 className="w-4 h-4 text-emerald-500" />
-                  <span>Escuchar</span>
-                </button>
-              </div>
-            )}
           </div>
 
           {/* Options List */}
@@ -269,8 +240,8 @@ export const QuizView: React.FC<QuizViewProps> = ({
 
           {/* Explanation Banner */}
           {isAnswered && (
-            <div className="p-4 rounded-2xl bg-bg-secondary border border-border space-y-2 animate-apple-in">
-              <div className="flex items-center gap-2">
+            <div className="p-4 rounded-2xl bg-bg-secondary border border-border space-y-3 animate-apple-in">
+              <div className="flex items-center justify-between gap-2">
                 {selectedAnswer === currentQuestion.correct_answer ? (
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
                     <CheckCircle2 className="w-4 h-4" /> ¡Respuesta Correcta!
@@ -279,6 +250,19 @@ export const QuizView: React.FC<QuizViewProps> = ({
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-rose-500">
                     <XCircle className="w-4 h-4" /> Respuesta Incorrecta
                   </span>
+                )}
+
+                {/* Listen to correct Chinese pronunciation only after answering */}
+                {(currentQuestion.hanzi || currentQuestion.correct_answer.match(/[\u4e00-\u9fa5]+/)) && (
+                  <button
+                    type="button"
+                    onClick={() => speakChinese(currentQuestion.hanzi || currentQuestion.correct_answer)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-bg-card hover:bg-bg-tertiary border border-border text-foreground hover:border-emerald-500/50 text-xs font-bold transition-all shadow-sm cursor-pointer"
+                    title="Escuchar pronunciación correcta"
+                  >
+                    <Volume2 className="w-3.5 h-3.5 text-emerald-500" />
+                    <span>Pronunciación</span>
+                  </button>
                 )}
               </div>
               {currentQuestion.explanation && (
