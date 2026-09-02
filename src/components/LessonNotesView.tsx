@@ -3,17 +3,25 @@
 import React, { useState } from "react";
 import { LESSON_MATERIALS } from "@/data/lessons";
 import { speakChinese } from "@/lib/speech";
-import { Volume2, ChevronDown, Lightbulb, BookOpen } from "lucide-react";
+import {
+  Volume2,
+  ChevronDown,
+  ChevronRight,
+  BookOpen,
+  Code2,
+  FileText,
+  Layers,
+  Sparkles,
+  Check,
+  Search,
+} from "lucide-react";
 
 export const LessonNotesView: React.FC = () => {
   const activeMaterial = LESSON_MATERIALS[0];
-  // Keep all sections open by default so user can read everything, but allow collapse
-  const [openSections, setOpenSections] = useState<Record<number, boolean>>({
-    0: true,
-    1: true,
-    2: true,
-    3: true,
-  });
+
+  // Starts completely COLLAPSED by default as requested
+  const [openSections, setOpenSections] = useState<Record<number, boolean>>({});
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const toggleSection = (index: number) => {
     setOpenSections((prev) => ({
@@ -22,128 +30,220 @@ export const LessonNotesView: React.FC = () => {
     }));
   };
 
+  const toggleAll = (expand: boolean) => {
+    if (!expand) {
+      setOpenSections({});
+    } else {
+      const all: Record<number, boolean> = { 99: true };
+      activeMaterial.sections.forEach((_, idx) => {
+        all[idx] = true;
+      });
+      setOpenSections(all);
+    }
+  };
+
+  const allExpanded =
+    activeMaterial.sections.every((_, idx) => !!openSections[idx]) && !!openSections[99];
+
+  // Search filter
+  const filteredSections = activeMaterial.sections
+    .map((section, sIdx) => {
+      const matchingItems = section.items.filter((item) => {
+        const query = searchQuery.toLowerCase();
+        return (
+          item.hanzi.toLowerCase().includes(query) ||
+          item.pinyin.toLowerCase().includes(query) ||
+          item.meaning.toLowerCase().includes(query) ||
+          (item.pronunciation && item.pronunciation.toLowerCase().includes(query))
+        );
+      });
+      return { section, originalIndex: sIdx, matchingItems };
+    })
+    .filter((entry) => !searchQuery || entry.matchingItems.length > 0);
+
   return (
-    <div className="max-w-2xl mx-auto px-2 sm:px-4 py-4 sm:py-6 space-y-4 animate-apple-in">
-      {/* Header */}
-      <div className="pb-2 border-b border-border">
-        <span className="px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-600 dark:text-teal-400 font-bold text-[11px] tracking-wide uppercase">
-          Guía de Estudio • Clase 2
-        </span>
-        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground mt-1">
-          {activeMaterial.title}
-        </h1>
-        <p className="text-xs text-text-secondary mt-1 leading-relaxed">
-          {activeMaterial.summary}
-        </p>
+    <div className="max-w-4xl mx-auto px-2 sm:px-6 py-4 sm:py-6 space-y-6 animate-apple-in">
+      {/* Doc Breadcrumbs & Header */}
+      <div className="space-y-2 pb-4 border-b border-border">
+        <div className="flex items-center gap-2 text-xs font-mono text-text-muted">
+          <span>Docs</span>
+          <ChevronRight className="w-3 h-3" />
+          <span>Clases</span>
+          <ChevronRight className="w-3 h-3" />
+          <span className="text-emerald-500 font-semibold">Clase 02</span>
+        </div>
+
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div>
+            <div className="flex items-center gap-2.5">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-mono">
+                Clase 02: Saludos & Presentación
+              </h1>
+              <span className="px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-600 dark:text-teal-400 font-mono text-[11px] font-bold border border-teal-500/20">
+                v2.0
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-text-secondary mt-1.5 max-w-2xl leading-relaxed">
+              {activeMaterial.summary}
+            </p>
+          </div>
+
+          {/* Quick Expand/Collapse all controls */}
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => toggleAll(!allExpanded)}
+              className="px-3 py-1.5 rounded-lg border border-border bg-bg-secondary hover:bg-bg-tertiary text-xs font-mono font-medium text-foreground transition-colors"
+            >
+              {allExpanded ? "Colapsar todo" : "Expandir todo"}
+            </button>
+          </div>
+        </div>
+
+        {/* Quick Search in Documentation */}
+        <div className="pt-2">
+          <div className="relative max-w-md">
+            <Search className="w-4 h-4 text-text-muted absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Buscar caracteres, pinyin o significado..."
+              className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-border bg-bg-secondary text-xs text-foreground placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
+            />
+          </div>
+        </div>
       </div>
 
-      {/* Accordion Sections */}
+      {/* Modular Documentation Sections */}
       <div className="space-y-3">
-        {activeMaterial.sections.map((section, sIdx) => {
-          const isOpen = !!openSections[sIdx];
+        {filteredSections.map(({ section, originalIndex, matchingItems }) => {
+          const isOpen = searchQuery ? true : !!openSections[originalIndex];
 
           return (
             <div
-              key={sIdx}
-              className="glass-card rounded-2xl overflow-hidden transition-all duration-200"
+              key={originalIndex}
+              className="rounded-2xl border border-border bg-bg-card overflow-hidden transition-all duration-200 shadow-sm"
             >
-              {/* Accordion Header */}
+              {/* Doc Section Header (Accordion Trigger) */}
               <button
                 type="button"
-                onClick={() => toggleSection(sIdx)}
-                className="w-full p-4 flex items-center justify-between text-left hover:bg-bg-secondary/60 transition-colors duration-200 select-none"
+                onClick={() => toggleSection(originalIndex)}
+                className="w-full p-4 flex items-center justify-between text-left hover:bg-bg-secondary/70 transition-colors select-none group"
               >
-                <div className="flex-1 pr-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-foreground leading-snug">
+                <div className="flex items-center gap-3 flex-1 min-w-0 pr-3">
+                  <div className="w-7 h-7 rounded-lg bg-bg-secondary border border-border flex items-center justify-center text-text-muted group-hover:text-foreground shrink-0 font-mono text-xs font-bold">
+                    {originalIndex + 1}
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-sm sm:text-base font-bold text-foreground block truncate">
                       {section.title}
                     </span>
-                    <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-bg-secondary text-text-muted border border-border">
-                      {section.items.length}
-                    </span>
+                    {section.description && (
+                      <span className="text-xs text-text-muted block truncate font-mono">
+                        {section.description}
+                      </span>
+                    )}
                   </div>
-                  {section.description && (
-                    <p className="text-[11px] text-text-muted mt-0.5 leading-snug">
-                      {section.description}
-                    </p>
-                  )}
                 </div>
 
-                <div
-                  className={`w-7 h-7 rounded-xl flex items-center justify-center text-text-muted transition-transform duration-200 shrink-0 ${
-                    isOpen ? "rotate-180 bg-bg-secondary text-foreground" : ""
-                  }`}
-                >
-                  <ChevronDown className="w-4 h-4" />
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-bg-secondary text-text-muted border border-border">
+                    {matchingItems.length} items
+                  </span>
+                  <div
+                    className={`w-6 h-6 rounded-md flex items-center justify-center text-text-muted transition-transform duration-200 ${
+                      isOpen ? "rotate-180 text-foreground" : ""
+                    }`}
+                  >
+                    <ChevronDown className="w-4 h-4" />
+                  </div>
                 </div>
               </button>
 
-              {/* Accordion Content */}
+              {/* Doc Section Content (Code-style Reference Table) */}
               {isOpen && (
-                <div className="px-4 pb-4 pt-1 space-y-2 border-t border-border/60">
-                  {section.items.map((item, iIdx) => (
-                    <div
-                      key={iIdx}
-                      className="p-3 sm:p-3.5 rounded-xl border border-border bg-bg-secondary flex items-center justify-between gap-3 hover:border-teal-500/40 transition-colors duration-200"
-                    >
-                      {/* Left: Chinese Character & Pinyin */}
-                      <div className="space-y-0.5 flex-1 min-w-0">
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-xl sm:text-2xl font-chinese font-bold text-foreground">
+                <div className="border-t border-border bg-bg-secondary/40 p-3 sm:p-4 space-y-2">
+                  <div className="grid grid-cols-1 gap-2">
+                    {matchingItems.map((item, iIdx) => (
+                      <div
+                        key={iIdx}
+                        className="p-3.5 rounded-xl border border-border bg-bg-card flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-emerald-500/40 transition-colors"
+                      >
+                        {/* Token & Pinyin */}
+                        <div className="flex items-center gap-3.5 min-w-0 sm:w-1/3">
+                          <span className="text-2xl sm:text-3xl font-chinese font-bold text-foreground shrink-0 tracking-wide">
                             {item.hanzi}
                           </span>
-                          <span className="text-xs font-bold text-teal-600 dark:text-teal-400">
-                            {item.pinyin}
-                          </span>
-                        </div>
-
-                        {/* Meaning & Phonetics */}
-                        <div className="text-xs text-foreground font-medium leading-tight">
-                          {item.meaning}
-                        </div>
-
-                        {item.pronunciation && (
-                          <div className="text-[11px] text-text-muted italic leading-snug pt-0.5">
-                            🗣️ {item.pronunciation}
+                          <div className="min-w-0">
+                            <span className="px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-600 dark:text-teal-400 font-mono text-xs font-bold inline-block">
+                              {item.pinyin}
+                            </span>
+                            {item.type && (
+                              <span className="text-[10px] text-text-muted block font-mono mt-0.5">
+                                {item.type}
+                              </span>
+                            )}
                           </div>
-                        )}
-                      </div>
+                        </div>
 
-                      {/* Right: Audio Pronounce Button */}
-                      <button
-                        type="button"
-                        onClick={() => speakChinese(item.hanzi || item.pinyin)}
-                        className="w-10 h-10 rounded-xl bg-bg-card hover:bg-bg-tertiary border border-border text-foreground hover:border-teal-500/50 flex items-center justify-center shrink-0 shadow-sm active:scale-95 transition-all duration-200 cursor-pointer"
-                        title="Escuchar pronunciación"
-                      >
-                        <Volume2 className="w-4 h-4 text-teal-500" />
-                      </button>
-                    </div>
-                  ))}
+                        {/* Meaning & Phonetic note */}
+                        <div className="flex-1 min-w-0 sm:px-4">
+                          <span className="text-xs sm:text-sm font-semibold text-foreground block">
+                            {item.meaning}
+                          </span>
+                          {item.pronunciation && (
+                            <span className="text-[11px] text-text-muted font-mono block mt-0.5">
+                              🗣️ {item.pronunciation}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Audio Trigger */}
+                        <div className="shrink-0 flex items-center justify-end">
+                          <button
+                            type="button"
+                            onClick={() => speakChinese(item.hanzi || item.pinyin)}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-bg-secondary hover:bg-bg-tertiary border border-border text-foreground hover:border-emerald-500/50 text-xs font-bold transition-all shadow-sm active:scale-95 cursor-pointer"
+                            title="Escuchar audio nativo"
+                          >
+                            <Volume2 className="w-3.5 h-3.5 text-emerald-500" />
+                            <span className="font-mono text-[11px]">Audio</span>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
           );
         })}
 
-        {/* Tips & Grammar Accordion */}
+        {/* Technical Callout: Grammar & Phonetics Rules */}
         {activeMaterial.grammar_tips.length > 0 && (
-          <div className="glass-card rounded-2xl overflow-hidden border border-amber-500/30">
+          <div className="rounded-2xl border border-amber-500/30 bg-bg-card overflow-hidden shadow-sm">
             <button
               type="button"
               onClick={() => toggleSection(99)}
-              className="w-full p-4 flex items-center justify-between text-left hover:bg-amber-500/5 transition-colors duration-200 select-none"
+              className="w-full p-4 flex items-center justify-between text-left hover:bg-amber-500/5 transition-colors select-none group"
             >
-              <div className="flex items-center gap-2">
-                <Lightbulb className="w-4 h-4 text-amber-500 shrink-0" />
-                <span className="text-sm font-bold text-foreground">
-                  Tips de Fonética & Gramática
-                </span>
+              <div className="flex items-center gap-3">
+                <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 shrink-0 font-mono text-xs font-bold">
+                  §
+                </div>
+                <div>
+                  <span className="text-sm sm:text-base font-bold text-foreground block">
+                    Reglas Gramaticales & Fonética
+                  </span>
+                  <span className="text-xs text-text-muted font-mono block">
+                    Notas de sintaxis para la Clase 02
+                  </span>
+                </div>
               </div>
 
               <div
-                className={`w-7 h-7 rounded-xl flex items-center justify-center text-text-muted transition-transform duration-200 shrink-0 ${
-                  openSections[99] ? "rotate-180 bg-bg-secondary text-foreground" : ""
+                className={`w-6 h-6 rounded-md flex items-center justify-center text-text-muted transition-transform duration-200 ${
+                  openSections[99] ? "rotate-180 text-foreground" : ""
                 }`}
               >
                 <ChevronDown className="w-4 h-4" />
@@ -151,14 +251,18 @@ export const LessonNotesView: React.FC = () => {
             </button>
 
             {openSections[99] && (
-              <div className="px-4 pb-4 pt-1 border-t border-border/60">
-                <ul className="space-y-2 text-xs text-text-secondary list-disc pl-5">
+              <div className="border-t border-border bg-amber-500/5 p-4 sm:p-5">
+                <div className="space-y-2.5 font-mono text-xs text-text-secondary leading-relaxed">
                   {activeMaterial.grammar_tips.map((tip, idx) => (
-                    <li key={idx} className="leading-relaxed">
-                      {tip}
-                    </li>
+                    <div
+                      key={idx}
+                      className="p-2.5 rounded-lg border border-amber-500/20 bg-bg-card flex items-start gap-2.5"
+                    >
+                      <span className="text-amber-500 font-bold select-none">•</span>
+                      <span className="text-foreground">{tip}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
           </div>
