@@ -17,11 +17,13 @@ import {
 } from "lucide-react";
 
 export const LessonNotesView: React.FC = () => {
-  const activeMaterial = LESSON_MATERIALS[0];
-
-  // Starts completely COLLAPSED by default as requested
+  const [selectedLesson, setSelectedLesson] = useState<number>(2);
+  const [isClassDropdownOpen, setIsClassDropdownOpen] = useState<boolean>(false);
   const [openSections, setOpenSections] = useState<Record<number, boolean>>({});
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const activeMaterial =
+    LESSON_MATERIALS.find((m) => m.lesson_number === selectedLesson) || LESSON_MATERIALS[0];
 
   const toggleSection = (index: number) => {
     setOpenSections((prev) => ({
@@ -65,19 +67,63 @@ export const LessonNotesView: React.FC = () => {
     <div className="max-w-4xl mx-auto px-2 sm:px-6 py-4 sm:py-6 space-y-6 animate-apple-in">
       {/* Doc Breadcrumbs & Header */}
       <div className="space-y-2 pb-4 border-b border-border">
-        <div className="flex items-center gap-2 text-xs font-mono text-text-muted">
+        <div className="flex items-center gap-2 text-xs font-mono text-text-muted relative">
           <span>Docs</span>
-          <ChevronRight className="w-3 h-3" />
-          <span>Clases</span>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-emerald-500 font-semibold">Clase 02</span>
+          <ChevronRight className="w-3 h-3 text-text-muted" />
+
+          {/* Interactive Class Selector Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setIsClassDropdownOpen((prev) => !prev)}
+              className="flex items-center gap-1 px-2 py-0.5 rounded-md hover:bg-bg-secondary text-foreground font-semibold transition-colors cursor-pointer border border-transparent hover:border-border"
+            >
+              <span>Clases</span>
+              <ChevronDown className="w-3 h-3 text-text-muted" />
+            </button>
+
+            {isClassDropdownOpen && (
+              <>
+                <div
+                  onClick={() => setIsClassDropdownOpen(false)}
+                  className="fixed inset-0 z-30"
+                />
+                <div className="absolute left-0 top-full mt-1.5 z-40 w-56 rounded-xl border border-border bg-bg-card p-1.5 shadow-apple-sm space-y-1">
+                  <div className="px-2.5 py-1 text-[10px] font-mono font-bold text-text-muted uppercase tracking-wider">
+                    Seleccionar Clase
+                  </div>
+                  {LESSON_MATERIALS.map((m) => (
+                    <button
+                      key={m.id}
+                      onClick={() => {
+                        setSelectedLesson(m.lesson_number);
+                        setIsClassDropdownOpen(false);
+                      }}
+                      className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-mono transition-colors text-left ${
+                        selectedLesson === m.lesson_number
+                          ? "bg-emerald-500/15 text-emerald-500 font-bold"
+                          : "text-foreground hover:bg-bg-secondary"
+                      }`}
+                    >
+                      <span>Clase 0{m.lesson_number}</span>
+                      {selectedLesson === m.lesson_number && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
+          <ChevronRight className="w-3 h-3 text-text-muted" />
+          <span className="text-emerald-500 font-semibold">Clase 0{activeMaterial.lesson_number}</span>
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
           <div>
             <div className="flex items-center gap-2.5">
               <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-mono">
-                Clase 02: Saludos & Presentación
+                {activeMaterial.title}
               </h1>
               <span className="px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-600 dark:text-teal-400 font-mono text-[11px] font-bold border border-teal-500/20">
                 v2.0
