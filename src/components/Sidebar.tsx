@@ -14,12 +14,17 @@ import {
   X,
   PanelLeftClose,
   PanelLeftOpen,
+  FileText,
+  GraduationCap,
 } from "lucide-react";
 import { StudentScore } from "@/types";
+import { LESSON_MATERIALS } from "@/data/lessons";
 
 interface SidebarProps {
   activeTab: "quizzes" | "surveys" | "leaderboard" | "notes";
   setActiveTab: (tab: "quizzes" | "surveys" | "leaderboard" | "notes") => void;
+  selectedLesson: number;
+  setSelectedLesson: (lessonNum: number) => void;
   currentUser: StudentScore;
   onUpdateName: (newName: string) => void;
   isCollapsed: boolean;
@@ -29,6 +34,8 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   setActiveTab,
+  selectedLesson,
+  setSelectedLesson,
   currentUser,
   onUpdateName,
   isCollapsed,
@@ -73,36 +80,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
     setIsEditingName(false);
   };
 
-  const navItems = [
-    {
-      id: "notes" as const,
-      label: "Documentación",
-      icon: BookOpen,
-      badge: "Clase 2",
-      badgeColor: "bg-teal-500/15 text-teal-600 dark:text-teal-400",
-    },
-    {
-      id: "quizzes" as const,
-      label: "Quizzes",
-      icon: CheckSquare,
-      badge: "8 preg.",
-      badgeColor: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
-    },
-    {
-      id: "surveys" as const,
-      label: "Encuestas",
-      icon: BarChart3,
-      badge: "Próx.",
-      badgeColor: "bg-blue-500/15 text-blue-500",
-    },
-    {
-      id: "leaderboard" as const,
-      label: "Ranking",
-      icon: Trophy,
-      badge: "Próx.",
-      badgeColor: "bg-amber-500/15 text-amber-500",
-    },
-  ];
+  const handleSelectLesson = (lessonNum: number) => {
+    setSelectedLesson(lessonNum);
+    setActiveTab("notes");
+    setIsMobileOpen(false);
+  };
 
   return (
     <>
@@ -154,7 +136,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         }`}
       >
         {/* Top Header */}
-        <div className={`${isCollapsed ? "p-3 space-y-4" : "p-4 sm:p-5 space-y-5"}`}>
+        <div className={`${isCollapsed ? "p-3 space-y-4" : "p-4 sm:p-5 space-y-5"} overflow-y-auto flex-1`}>
           <div className="flex items-center justify-between">
             {!isCollapsed ? (
               <div className="flex items-center gap-3 min-w-0">
@@ -198,50 +180,150 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
-          {/* Navigation Links */}
-          <nav className="space-y-1 pt-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeTab === item.id;
+          {/* Sidebar Hierarchical Navigation */}
+          <nav className="space-y-4 pt-1">
+            {/* Section 1: Documentation by Classes */}
+            <div className="space-y-1">
+              {!isCollapsed && (
+                <span className="px-3 text-[10px] font-mono font-bold text-text-muted uppercase tracking-wider block">
+                  Clases & Docs
+                </span>
+              )}
+              {LESSON_MATERIALS.map((lesson) => {
+                const isSelected = activeTab === "notes" && selectedLesson === lesson.lesson_number;
 
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    setActiveTab(item.id);
-                    setIsMobileOpen(false);
-                  }}
-                  title={isCollapsed ? item.label : undefined}
-                  className={`w-full flex items-center ${
-                    isCollapsed ? "justify-center px-2 py-2.5" : "justify-between px-3 py-2.5"
-                  } rounded-xl text-xs font-bold transition-all duration-200 ${
-                    isActive
-                      ? "bg-emerald-500 text-white shadow-apple-glow"
-                      : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-white" : "text-text-muted"}`} />
-                    {!isCollapsed && <span>{item.label}</span>}
-                  </div>
+                return (
+                  <button
+                    key={lesson.id}
+                    onClick={() => handleSelectLesson(lesson.lesson_number)}
+                    title={isCollapsed ? `Clase 0${lesson.lesson_number}` : undefined}
+                    className={`w-full flex items-center ${
+                      isCollapsed ? "justify-center px-2 py-2.5" : "justify-between px-3 py-2"
+                    } rounded-xl text-xs font-mono transition-all duration-200 ${
+                      isSelected
+                        ? "bg-teal-500/15 text-teal-600 dark:text-teal-400 font-bold border border-teal-500/30"
+                        : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <BookOpen className={`w-3.5 h-3.5 shrink-0 ${isSelected ? "text-teal-500" : "text-text-muted"}`} />
+                      {!isCollapsed && (
+                        <span className="truncate">Clase 0{lesson.lesson_number}</span>
+                      )}
+                    </div>
 
-                  {!isCollapsed && item.badge && (
-                    <span
-                      className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
-                        isActive ? "bg-white/20 text-white" : item.badgeColor
-                      }`}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+                    {!isCollapsed && (
+                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-bg-secondary text-text-muted border border-border">
+                        Activa
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Section 2: Quizzes & Practice */}
+            <div className="space-y-1">
+              {!isCollapsed && (
+                <span className="px-3 text-[10px] font-mono font-bold text-text-muted uppercase tracking-wider block">
+                  Práctica
+                </span>
+              )}
+              <button
+                onClick={() => {
+                  setActiveTab("quizzes");
+                  setIsMobileOpen(false);
+                }}
+                title={isCollapsed ? "Quizzes" : undefined}
+                className={`w-full flex items-center ${
+                  isCollapsed ? "justify-center px-2 py-2.5" : "justify-between px-3 py-2"
+                } rounded-xl text-xs font-mono font-bold transition-all duration-200 ${
+                  activeTab === "quizzes"
+                    ? "bg-emerald-500 text-white shadow-apple-glow"
+                    : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <CheckSquare className={`w-3.5 h-3.5 shrink-0 ${activeTab === "quizzes" ? "text-white" : "text-text-muted"}`} />
+                  {!isCollapsed && <span>Quizzes</span>}
+                </div>
+
+                {!isCollapsed && (
+                  <span
+                    className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
+                      activeTab === "quizzes" ? "bg-white/20 text-white" : "bg-emerald-500/15 text-emerald-500"
+                    }`}
+                  >
+                    8 preg.
+                  </span>
+                )}
+              </button>
+            </div>
+
+            {/* Section 3: Community & Stats */}
+            <div className="space-y-1">
+              {!isCollapsed && (
+                <span className="px-3 text-[10px] font-mono font-bold text-text-muted uppercase tracking-wider block">
+                  Comunidad
+                </span>
+              )}
+              <button
+                onClick={() => {
+                  setActiveTab("surveys");
+                  setIsMobileOpen(false);
+                }}
+                title={isCollapsed ? "Encuestas" : undefined}
+                className={`w-full flex items-center ${
+                  isCollapsed ? "justify-center px-2 py-2.5" : "justify-between px-3 py-2"
+                } rounded-xl text-xs font-mono font-bold transition-all duration-200 ${
+                  activeTab === "surveys"
+                    ? "bg-blue-500 text-white shadow-apple-glow"
+                    : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <BarChart3 className={`w-3.5 h-3.5 shrink-0 ${activeTab === "surveys" ? "text-white" : "text-text-muted"}`} />
+                  {!isCollapsed && <span>Encuestas</span>}
+                </div>
+
+                {!isCollapsed && (
+                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-blue-500/10 text-blue-500 uppercase">
+                    Próx.
+                  </span>
+                )}
+              </button>
+
+              <button
+                onClick={() => {
+                  setActiveTab("leaderboard");
+                  setIsMobileOpen(false);
+                }}
+                title={isCollapsed ? "Ranking" : undefined}
+                className={`w-full flex items-center ${
+                  isCollapsed ? "justify-center px-2 py-2.5" : "justify-between px-3 py-2"
+                } rounded-xl text-xs font-mono font-bold transition-all duration-200 ${
+                  activeTab === "leaderboard"
+                    ? "bg-amber-500 text-white shadow-apple-glow"
+                    : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Trophy className={`w-3.5 h-3.5 shrink-0 ${activeTab === "leaderboard" ? "text-white" : "text-text-muted"}`} />
+                  {!isCollapsed && <span>Ranking</span>}
+                </div>
+
+                {!isCollapsed && (
+                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-amber-500/10 text-amber-500 uppercase">
+                    Próx.
+                  </span>
+                )}
+              </button>
+            </div>
           </nav>
         </div>
 
         {/* Bottom Section */}
-        <div className={`${isCollapsed ? "p-2 space-y-2" : "p-3 sm:p-4 space-y-2.5"} border-t border-border`}>
+        <div className={`${isCollapsed ? "p-2 space-y-2" : "p-3 sm:p-4 space-y-2.5"} border-t border-border shrink-0`}>
           {/* User Profile Card */}
           {!isCollapsed ? (
             <div className="p-2.5 rounded-xl bg-bg-secondary border border-border">

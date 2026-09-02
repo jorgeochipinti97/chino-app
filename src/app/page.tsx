@@ -17,6 +17,7 @@ import { QuizData, StudentScore } from "@/types";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"quizzes" | "surveys" | "leaderboard" | "notes">("notes");
+  const [selectedLesson, setSelectedLesson] = useState<number>(2);
   const [quizzes, setQuizzes] = useState<QuizData[]>(INITIAL_QUIZZES);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
   const [currentUser, setCurrentUserState] = useState<StudentScore>({
@@ -56,6 +57,8 @@ export default function Home() {
       <Sidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        selectedLesson={selectedLesson}
+        setSelectedLesson={setSelectedLesson}
         currentUser={currentUser}
         onUpdateName={handleUpdateName}
         isCollapsed={isSidebarCollapsed}
@@ -64,7 +67,10 @@ export default function Home() {
 
       <main className="flex-1 min-w-0 px-3 py-4 sm:px-6 sm:py-6 overflow-y-auto">
         {activeTab === "notes" && (
-          <LessonNotesView />
+          <LessonNotesView
+            selectedLesson={selectedLesson}
+            setSelectedLesson={setSelectedLesson}
+          />
         )}
 
         {activeTab === "quizzes" && (

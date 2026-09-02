@@ -8,22 +8,34 @@ import {
   ChevronDown,
   ChevronRight,
   BookOpen,
-  Code2,
-  FileText,
-  Layers,
-  Sparkles,
-  Check,
   Search,
 } from "lucide-react";
 
-export const LessonNotesView: React.FC = () => {
-  const [selectedLesson, setSelectedLesson] = useState<number>(2);
+interface LessonNotesViewProps {
+  selectedLesson?: number;
+  setSelectedLesson?: (num: number) => void;
+}
+
+export const LessonNotesView: React.FC<LessonNotesViewProps> = ({
+  selectedLesson: propSelectedLesson = 2,
+  setSelectedLesson: propSetSelectedLesson,
+}) => {
+  const [internalSelectedLesson, setInternalSelectedLesson] = useState<number>(propSelectedLesson);
   const [isClassDropdownOpen, setIsClassDropdownOpen] = useState<boolean>(false);
   const [openSections, setOpenSections] = useState<Record<number, boolean>>({});
   const [searchQuery, setSearchQuery] = useState<string>("");
 
+  const currentLessonNum = propSetSelectedLesson ? propSelectedLesson : internalSelectedLesson;
+  const setCurrentLessonNum = (num: number) => {
+    if (propSetSelectedLesson) {
+      propSetSelectedLesson(num);
+    } else {
+      setInternalSelectedLesson(num);
+    }
+  };
+
   const activeMaterial =
-    LESSON_MATERIALS.find((m) => m.lesson_number === selectedLesson) || LESSON_MATERIALS[0];
+    LESSON_MATERIALS.find((m) => m.lesson_number === currentLessonNum) || LESSON_MATERIALS[0];
 
   const toggleSection = (index: number) => {
     setOpenSections((prev) => ({
@@ -95,17 +107,17 @@ export const LessonNotesView: React.FC = () => {
                     <button
                       key={m.id}
                       onClick={() => {
-                        setSelectedLesson(m.lesson_number);
+                        setCurrentLessonNum(m.lesson_number);
                         setIsClassDropdownOpen(false);
                       }}
                       className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-mono transition-colors text-left ${
-                        selectedLesson === m.lesson_number
+                        currentLessonNum === m.lesson_number
                           ? "bg-emerald-500/15 text-emerald-500 font-bold"
                           : "text-foreground hover:bg-bg-secondary"
                       }`}
                     >
                       <span>Clase 0{m.lesson_number}</span>
-                      {selectedLesson === m.lesson_number && (
+                      {currentLessonNum === m.lesson_number && (
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                       )}
                     </button>
