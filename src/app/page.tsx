@@ -14,12 +14,13 @@ import {
   updateStudentQuizScore,
 } from "@/lib/storage";
 import { QuizData, StudentScore } from "@/types";
+import { PanelLeftOpen, Menu } from "lucide-react";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"quizzes" | "surveys" | "leaderboard" | "notes">("notes");
   const [selectedLesson, setSelectedLesson] = useState<number>(2);
   const [quizzes, setQuizzes] = useState<QuizData[]>(INITIAL_QUIZZES);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
   const [currentUser, setCurrentUserState] = useState<StudentScore>({
     id: "std-local",
     name: "Jorge",
@@ -61,36 +62,57 @@ export default function Home() {
         setSelectedLesson={setSelectedLesson}
         currentUser={currentUser}
         onUpdateName={handleUpdateName}
-        isCollapsed={isSidebarCollapsed}
-        setIsCollapsed={setIsSidebarCollapsed}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
 
-      <main className="flex-1 min-w-0 px-3 py-4 sm:px-6 sm:py-6 overflow-y-auto">
-        {activeTab === "notes" && (
-          <LessonNotesView
-            selectedLesson={selectedLesson}
-            setSelectedLesson={setSelectedLesson}
-          />
+      <div className="flex-1 min-w-0 flex flex-col h-screen overflow-y-auto">
+        {/* Top Control Bar when Sidebar is Closed on Desktop */}
+        {!isSidebarOpen && (
+          <div className="sticky top-0 z-30 px-4 py-3 bg-background/80 apple-blur border-b border-border flex items-center justify-between animate-apple-in">
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border bg-bg-card hover:bg-bg-secondary text-xs font-mono font-bold text-foreground transition-all shadow-sm"
+              title="Mostrar barra lateral"
+            >
+              <PanelLeftOpen className="w-4 h-4 text-emerald-500" />
+              <span>Barra lateral</span>
+            </button>
+
+            <div className="flex items-center gap-2 text-xs font-mono text-text-muted">
+              <span className="font-chinese font-bold text-emerald-500 text-sm">汉</span>
+              <span>Chino App</span>
+            </div>
+          </div>
         )}
 
-        {activeTab === "quizzes" && (
-          <QuizView
-            quizzes={quizzes}
-            currentUser={currentUser}
-            onFinishQuiz={handleFinishQuiz}
-          />
-        )}
+        <main className="flex-1 min-w-0 px-3 py-4 sm:px-6 sm:py-6">
+          {activeTab === "notes" && (
+            <LessonNotesView
+              selectedLesson={selectedLesson}
+              setSelectedLesson={setSelectedLesson}
+            />
+          )}
 
-        {activeTab === "surveys" && (
-          <SurveyView />
-        )}
+          {activeTab === "quizzes" && (
+            <QuizView
+              quizzes={quizzes}
+              currentUser={currentUser}
+              onFinishQuiz={handleFinishQuiz}
+            />
+          )}
 
-        {activeTab === "leaderboard" && (
-          <LeaderboardView
-            currentUser={currentUser}
-          />
-        )}
-      </main>
+          {activeTab === "surveys" && (
+            <SurveyView />
+          )}
+
+          {activeTab === "leaderboard" && (
+            <LeaderboardView
+              currentUser={currentUser}
+            />
+          )}
+        </main>
+      </div>
     </div>
   );
 }
