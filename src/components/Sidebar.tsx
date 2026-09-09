@@ -15,13 +15,15 @@ import {
   PanelLeftClose,
   ChevronRight,
   GraduationCap,
+  Brush,
+  Ear,
 } from "lucide-react";
 import { StudentScore } from "@/types";
-import { LESSON_MATERIALS } from "@/data/lessons";
+import { LESSON_MATERIALS, INITIAL_QUIZZES } from "@/data/lessons";
 
 interface SidebarProps {
-  activeTab: "quizzes" | "surveys" | "leaderboard" | "notes";
-  setActiveTab: (tab: "quizzes" | "surveys" | "leaderboard" | "notes") => void;
+  activeTab: "quizzes" | "surveys" | "leaderboard" | "notes" | "strokes" | "tones";
+  setActiveTab: (tab: "quizzes" | "surveys" | "leaderboard" | "notes" | "strokes" | "tones") => void;
   selectedLesson: number;
   setSelectedLesson: (lessonNum: number) => void;
   currentUser: StudentScore;
@@ -78,9 +80,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
     setIsEditingName(false);
   };
 
+  /** En celular el sidebar tapa la pantalla: al elegir algo hay que cerrarlo. */
+  const closeIfMobile = () => {
+    if (typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches) {
+      onClose();
+    }
+  };
+
+  const handleSelectTab = (tab: SidebarProps["activeTab"]) => {
+    setActiveTab(tab);
+    closeIfMobile();
+  };
+
   const handleSelectLesson = (lessonNum: number) => {
     setSelectedLesson(lessonNum);
     setActiveTab("notes");
+    closeIfMobile();
   };
 
   return (
@@ -95,7 +110,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Sidebar with smooth 300ms transition */}
       <aside
-        className={`fixed md:sticky top-0 z-50 h-screen border-r border-border bg-bg-card flex flex-col justify-between transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] select-none overflow-hidden ${
+        className={`fixed md:sticky top-0 z-50 h-[100dvh] border-r border-border bg-bg-card flex flex-col justify-between transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] select-none overflow-hidden ${
           isOpen
             ? "w-64 opacity-100 translate-x-0"
             : "w-0 opacity-0 -translate-x-full md:translate-x-0 border-r-0"
@@ -103,7 +118,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       >
         <div className="w-64 flex flex-col h-full justify-between">
           {/* Top Section */}
-          <div className="p-4 space-y-5 overflow-y-auto flex-1">
+          <div className="p-4 pt-[max(1rem,env(safe-area-inset-top))] space-y-5 overflow-y-auto flex-1 overscroll-contain">
             {/* Header */}
             <div className="flex items-center justify-between pb-1">
               <div className="flex items-center gap-2.5 min-w-0">
@@ -123,7 +138,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {/* Close Sidebar Button */}
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-lg text-text-muted hover:text-foreground hover:bg-bg-secondary transition-colors cursor-pointer"
+                className="w-11 h-11 -mr-1.5 flex items-center justify-center rounded-lg text-text-muted hover:text-foreground hover:bg-bg-secondary transition-colors cursor-pointer shrink-0"
                 title="Ocultar barra lateral"
               >
                 <PanelLeftClose className="w-4 h-4" />
@@ -135,8 +150,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {/* Primary Navigation Tabs */}
               <div className="space-y-1">
                 <button
-                  onClick={() => setActiveTab("notes")}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer ${
+                  onClick={() => handleSelectTab("notes")}
+                  className={`w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
                     activeTab === "notes"
                       ? "bg-teal-500 text-white shadow-apple-glow"
                       : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
@@ -160,8 +175,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </button>
 
                 <button
-                  onClick={() => setActiveTab("quizzes")}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer ${
+                  onClick={() => handleSelectTab("quizzes")}
+                  className={`w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
                     activeTab === "quizzes"
                       ? "bg-emerald-500 text-white shadow-apple-glow"
                       : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
@@ -182,7 +197,56 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         : "bg-emerald-500/15 text-emerald-500"
                     }`}
                   >
-                    8 preg.
+                    {INITIAL_QUIZZES.reduce((acc, q) => acc + q.questions.length, 0)} preg.
+                  </span>
+                </button>
+                <button
+                  onClick={() => handleSelectTab("strokes")}
+                  className={`w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
+                    activeTab === "strokes"
+                      ? "bg-rose-500 text-white shadow-apple-glow"
+                      : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Brush
+                      className={`w-4 h-4 shrink-0 ${
+                        activeTab === "strokes" ? "text-white" : "text-rose-500"
+                      }`}
+                    />
+                    <span>Trazos</span>
+                  </div>
+                  <span
+                    className={`text-[10px] font-chinese px-1.5 py-0.2 rounded-full ${
+                      activeTab === "strokes" ? "bg-white/20 text-white" : "bg-rose-500/15 text-rose-500"
+                    }`}
+                  >
+                    笔顺
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => handleSelectTab("tones")}
+                  className={`w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
+                    activeTab === "tones"
+                      ? "bg-violet-500 text-white shadow-apple-glow"
+                      : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Ear
+                      className={`w-4 h-4 shrink-0 ${
+                        activeTab === "tones" ? "text-white" : "text-violet-500"
+                      }`}
+                    />
+                    <span>Tonos</span>
+                  </div>
+                  <span
+                    className={`text-[10px] font-chinese px-1.5 py-0.2 rounded-full ${
+                      activeTab === "tones" ? "bg-white/20 text-white" : "bg-violet-500/15 text-violet-500"
+                    }`}
+                  >
+                    声调
                   </span>
                 </button>
               </div>
@@ -192,7 +256,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <span className="px-3 text-[10px] font-mono font-bold text-text-muted uppercase tracking-wider block">
                   Índice de Clases
                 </span>
-                <div className="space-y-0.5 max-h-52 overflow-y-auto pr-1">
+                <div className="space-y-0.5 md:max-h-52 md:overflow-y-auto pr-1">
                   {LESSON_MATERIALS.map((lesson) => {
                     const isSelected = activeTab === "notes" && selectedLesson === lesson.lesson_number;
 
@@ -200,7 +264,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       <button
                         key={lesson.id}
                         onClick={() => handleSelectLesson(lesson.lesson_number)}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-mono transition-all duration-200 cursor-pointer text-left ${
+                        className={`w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl text-xs font-mono transition-all duration-200 cursor-pointer text-left active:scale-[0.98] ${
                           isSelected
                             ? "bg-teal-500/15 text-teal-600 dark:text-teal-400 font-bold border border-teal-500/30"
                             : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
@@ -225,8 +289,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   Comunidad
                 </span>
                 <button
-                  onClick={() => setActiveTab("surveys")}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer ${
+                  onClick={() => handleSelectTab("surveys")}
+                  className={`w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
                     activeTab === "surveys"
                       ? "bg-blue-500 text-white shadow-apple-glow"
                       : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
@@ -246,8 +310,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </button>
 
                 <button
-                  onClick={() => setActiveTab("leaderboard")}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer ${
+                  onClick={() => handleSelectTab("leaderboard")}
+                  className={`w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
                     activeTab === "leaderboard"
                       ? "bg-amber-500 text-white shadow-apple-glow"
                       : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
@@ -270,7 +334,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* Bottom Profile & Theme */}
-          <div className="p-3 space-y-2.5 border-t border-border shrink-0">
+          <div className="p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] space-y-2.5 border-t border-border shrink-0">
             {/* User Profile Card */}
             <div className="p-2.5 rounded-xl bg-bg-secondary border border-border">
               <div className="flex items-center justify-between gap-2">
@@ -314,7 +378,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {/* Theme Switcher Button */}
             <button
               onClick={toggleTheme}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-xl border border-border bg-bg-secondary hover:bg-bg-tertiary text-xs font-bold text-foreground transition-colors cursor-pointer"
+              className="w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl border border-border bg-bg-secondary hover:bg-bg-tertiary text-xs font-bold text-foreground transition-colors cursor-pointer active:scale-[0.98]"
               title="Cambiar tema claro/oscuro"
             >
               <span className="text-text-secondary">Modo {isDark ? "Oscuro" : "Claro"}</span>

@@ -71,3 +71,19 @@ export interface LessonMaterial {
   }[];
   grammar_tips: string[];
 }
+
+export interface StrokeCharacter {
+  hanzi: string;
+  pinyin: string;
+  meaning: string;
+  /** Regla de orden de trazos que ilustra este caracter (opcional). */
+  rule?: string;
+}
+
+export interface StrokeSet {
+  id: string;
+  lesson_number: number;
+  title: string;
+  description: string;
+  characters: StrokeCharacter[];
+}

@@ -74,8 +74,8 @@ export const LessonNotesView: React.FC<LessonNotesViewProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Buscar caracteres, pinyin o traducción en esta clase..."
-              className="w-full pl-9 pr-3 py-2 rounded-xl border border-border bg-bg-secondary text-xs text-foreground placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-teal-500 font-mono transition-all"
+              placeholder="Buscar caracteres, pinyin o traducción..."
+              className="w-full pl-9 pr-3 min-h-11 py-2 rounded-xl border border-border bg-bg-secondary text-base sm:text-xs text-foreground placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-teal-500 font-mono transition-all"
             />
           </div>
         </div>
@@ -115,7 +115,7 @@ export const LessonNotesView: React.FC<LessonNotesViewProps> = ({
                       {item.hanzi}
                     </span>
                     <div className="min-w-0">
-                      <span className="px-2.5 py-1 rounded-lg bg-teal-500/10 text-teal-600 dark:text-teal-400 font-mono text-xs font-bold inline-block">
+                      <span className="px-2.5 py-1 rounded-lg bg-teal-500/10 text-teal-600 dark:text-teal-400 font-pinyin text-xs font-bold inline-block">
                         {item.pinyin}
                       </span>
                       {item.type && (
@@ -143,7 +143,7 @@ export const LessonNotesView: React.FC<LessonNotesViewProps> = ({
                     <button
                       type="button"
                       onClick={() => speakChinese(item.hanzi || item.pinyin)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-bg-secondary hover:bg-bg-tertiary border border-border text-foreground hover:border-teal-500/50 text-xs font-bold transition-all shadow-sm active:scale-95 cursor-pointer"
+                      className="w-full sm:w-auto justify-center flex items-center gap-1.5 px-3 min-h-11 rounded-xl bg-bg-secondary hover:bg-bg-tertiary border border-border text-foreground hover:border-teal-500/50 text-xs font-bold transition-all shadow-sm active:scale-95 cursor-pointer"
                       title="Pronunciación nativa en mandarín"
                     >
                       <Volume2 className="w-3.5 h-3.5 text-teal-500" />

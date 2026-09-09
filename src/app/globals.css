@@ -38,12 +38,19 @@
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Sin el flash gris/azul de iOS y Android al tocar un botón */
+  -webkit-tap-highlight-color: transparent;
 }
 
 html,
 body {
   margin: 0;
   padding: 0;
+  /* El main de esta app es el celular: nada debe desbordar a lo ancho */
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100dvh;
@@ -88,4 +95,29 @@ body {
 
 .animate-apple-in {
   animation: appleFadeUp 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* En celular los caracteres chinos se leen más grandes: el hanzi es el contenido, no decoración */
+.font-chinese {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+}
+
+/* Cualquier cosa tocable llega al mínimo de 44px recomendado por Apple/Google */
+@media (pointer: coarse) {
+  button,
+  [role="button"],
+  select {
+    min-height: 44px;
+  }
+}
+
+/*
+ * Pinyin con marca de tono. Las fuentes monoespaciadas del sistema (SF Mono, Menlo)
+ * NO tienen los glifos precompuestos ǖ ǘ ǚ ǜ, así que el navegador los arma apilando
+ * la diéresis y el macron a mano y quedan pisados. Estas sí los traen enteros.
+ */
+.font-pinyin {
+  font-family: "Charis SIL", "Gentium Plus", "Doulos SIL", "Lucida Sans Unicode",
+    "Arial Unicode MS", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-feature-settings: "kern" 1;
 }

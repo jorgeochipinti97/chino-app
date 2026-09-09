@@ -4,6 +4,8 @@ import { INITIAL_QUIZZES } from "@/data/lessons";
 const STORAGE_KEYS = {
   QUIZZES: "chino_app_quizzes_v2",
   CURRENT_USER: "chino_app_current_user_v2",
+  MASTERED_CHARS: "chino_app_mastered_chars_v1",
+  TONE_BEST: "chino_app_tone_best_v1",
 };
 
 const DEFAULT_USER: StudentScore = {
@@ -17,6 +19,12 @@ const DEFAULT_USER: StudentScore = {
   last_active: "Ahora",
 };
 
+/**
+ * Los quizzes del curso (INITIAL_QUIZZES) son la fuente de verdad: si agregamos una clase
+ * o corregimos preguntas, tiene que verse aunque el navegador ya tenga una copia vieja
+ * guardada. Por eso mergeamos en vez de devolver el localStorage tal cual — se pisan los
+ * built-in con la versión del código y se conservan los quizzes importados por JSON.
+ */
 export function getStoredQuizzes(): QuizData[] {
   if (typeof window === "undefined") return INITIAL_QUIZZES;
   try {
@@ -25,10 +33,40 @@ export function getStoredQuizzes(): QuizData[] {
       localStorage.setItem(STORAGE_KEYS.QUIZZES, JSON.stringify(INITIAL_QUIZZES));
       return INITIAL_QUIZZES;
     }
-    return JSON.parse(data);
+
+    const stored: QuizData[] = JSON.parse(data);
+    const builtInIds = new Set(INITIAL_QUIZZES.map((q) => q.id));
+    const imported = stored.filter((q) => !builtInIds.has(q.id));
+    const merged = [...INITIAL_QUIZZES, ...imported];
+
+    localStorage.setItem(STORAGE_KEYS.QUIZZES, JSON.stringify(merged));
+    return merged;
   } catch {
     return INITIAL_QUIZZES;
   }
+}
+
+/** Caracteres completados sin ningún error en el desafío de trazos. */
+export function getMasteredChars(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.MASTERED_CHARS);
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function markCharMastered(char: string): string[] {
+  const current = getMasteredChars();
+  if (current.includes(char)) return current;
+  const updated = [...current, char];
+  try {
+    localStorage.setItem(STORAGE_KEYS.MASTERED_CHARS, JSON.stringify(updated));
+  } catch {
+    // storage lleno o bloqueado: el progreso no se persiste, el juego sigue andando
+  }
+  return updated;
 }
 
 export function saveQuiz(quiz: QuizData): QuizData[] {
@@ -87,4 +125,26 @@ export function updateStudentQuizScore(
 
   setCurrentUser(updatedUser);
   return [updatedUser];
+}
+
+/** Mejor puntaje en una serie del ejercicio de tonos. */
+export function getToneBest(): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.TONE_BEST);
+    return data ? Number(data) || 0 : 0;
+  } catch {
+    return 0;
+  }
+}
+
+export function saveToneBest(score: number): number {
+  const current = getToneBest();
+  if (score <= current) return current;
+  try {
+    localStorage.setItem(STORAGE_KEYS.TONE_BEST, String(score));
+  } catch {
+    // sin persistencia: el puntaje igual se muestra en la sesión
+  }
+  return score;
 }

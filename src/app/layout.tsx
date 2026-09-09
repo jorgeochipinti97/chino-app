@@ -24,12 +24,19 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
+  appleWebApp: {
+    capable: true,
+    title: "Chino App",
+    statusBarStyle: "black-translucent",
+  },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
+  // Sin maximumScale: en una app de chino hacer zoom sobre un caracter es parte del uso,
+  // y bloquear el pinch rompe accesibilidad (WCAG 1.4.4).
+  viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
     { media: "(prefers-color-scheme: dark)", color: "#090a0f" },

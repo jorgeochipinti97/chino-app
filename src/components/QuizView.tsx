@@ -138,7 +138,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
           <select
             value={activeQuizId}
             onChange={(e) => handleQuizChange(e.target.value)}
-            className="px-3 py-1.5 rounded-xl border border-border bg-bg-card font-semibold text-xs text-foreground outline-none cursor-pointer shadow-sm"
+            className="px-3 py-1.5 rounded-xl border border-border bg-bg-card font-semibold text-base sm:text-xs text-foreground outline-none cursor-pointer shadow-sm max-w-full"
           >
             {quizzes.map((q) => (
               <option key={q.id} value={q.id}>
@@ -184,7 +184,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
                 <button
                   type="button"
                   onClick={() => speakChinese(currentQuestion.hanzi!)}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-bg-secondary hover:bg-bg-tertiary border border-border text-xs font-bold text-foreground transition-all cursor-pointer shadow-sm active:scale-95"
+                  className="inline-flex items-center gap-2 px-3 min-h-11 rounded-xl bg-bg-secondary hover:bg-bg-tertiary border border-border text-xs font-bold text-foreground transition-all cursor-pointer shadow-sm active:scale-95"
                   title="Escuchar carácter"
                 >
                   <Volume2 className="w-3.5 h-3.5 text-emerald-500" />
@@ -295,7 +295,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
                   <button
                     type="button"
                     onClick={() => speakChinese(currentQuestion.hanzi || currentQuestion.correct_answer)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-bg-card hover:bg-bg-tertiary border border-border text-foreground hover:border-emerald-500/50 text-xs font-bold transition-all shadow-sm cursor-pointer"
+                    className="flex items-center gap-1.5 px-3 min-h-11 rounded-xl bg-bg-card hover:bg-bg-tertiary border border-border text-foreground hover:border-emerald-500/50 text-xs font-bold transition-all shadow-sm cursor-pointer active:scale-95"
                     title="Escuchar pronunciación de la respuesta"
                   >
                     <Volume2 className="w-3.5 h-3.5 text-emerald-500" />

@@ -42,3 +42,22 @@ export function speakChinese(text: string) {
 
   window.speechSynthesis.speak(utterance);
 }
+
+/**
+ * ¿El dispositivo tiene una voz en chino instalada? Sin esto, pedirle zh-CN al
+ * navegador devuelve una voz en español leyendo los caracteres como puede.
+ */
+export function hasChineseVoice(): boolean {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return false;
+  return window.speechSynthesis
+    .getVoices()
+    .some((v) => v.lang.toLowerCase().startsWith("zh"));
+}
+
+/** Las voces cargan de forma asíncrona en Chrome: hay que esperar el evento. */
+export function onVoicesReady(cb: () => void): () => void {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return () => {};
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.addEventListener("voiceschanged", cb);
+  return () => window.speechSynthesis.removeEventListener("voiceschanged", cb);
+}
