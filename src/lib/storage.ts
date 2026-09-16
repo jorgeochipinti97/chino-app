@@ -6,6 +6,8 @@ const STORAGE_KEYS = {
   CURRENT_USER: "chino_app_current_user_v2",
   MASTERED_CHARS: "chino_app_mastered_chars_v1",
   TONE_BEST: "chino_app_tone_best_v1",
+  NUMBER_BEST: "chino_app_number_best_v1",
+  SENTENCE_BEST: "chino_app_sentence_best_v1",
 };
 
 const DEFAULT_USER: StudentScore = {
@@ -143,6 +145,62 @@ export function saveToneBest(score: number): number {
   if (score <= current) return current;
   try {
     localStorage.setItem(STORAGE_KEYS.TONE_BEST, String(score));
+  } catch {
+    // sin persistencia: el puntaje igual se muestra en la sesión
+  }
+  return score;
+}
+
+/** Mejor puntaje de cada modo del entrenador de números (0–99). */
+export type NumberMode = "dictation" | "build";
+
+export function getNumberBest(mode: NumberMode): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.NUMBER_BEST);
+    if (!data) return 0;
+    const parsed = JSON.parse(data) as Partial<Record<NumberMode, number>>;
+    return parsed[mode] || 0;
+  } catch {
+    return 0;
+  }
+}
+
+export function saveNumberBest(mode: NumberMode, score: number): number {
+  const current = getNumberBest(mode);
+  if (score <= current) return current;
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.NUMBER_BEST);
+    const parsed = data ? (JSON.parse(data) as Partial<Record<NumberMode, number>>) : {};
+    parsed[mode] = score;
+    localStorage.setItem(STORAGE_KEYS.NUMBER_BEST, JSON.stringify(parsed));
+  } catch {
+    // sin persistencia: el puntaje igual se muestra en la sesión
+  }
+  return score;
+}
+
+/** Mejor puntaje por set del drill de oraciones. */
+export function getSentenceBest(setId: string): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.SENTENCE_BEST);
+    if (!data) return 0;
+    const parsed = JSON.parse(data) as Record<string, number>;
+    return parsed[setId] || 0;
+  } catch {
+    return 0;
+  }
+}
+
+export function saveSentenceBest(setId: string, score: number): number {
+  const current = getSentenceBest(setId);
+  if (score <= current) return current;
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.SENTENCE_BEST);
+    const parsed = data ? (JSON.parse(data) as Record<string, number>) : {};
+    parsed[setId] = score;
+    localStorage.setItem(STORAGE_KEYS.SENTENCE_BEST, JSON.stringify(parsed));
   } catch {
     // sin persistencia: el puntaje igual se muestra en la sesión
   }

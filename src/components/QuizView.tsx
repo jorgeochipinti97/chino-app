@@ -1,9 +1,19 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import confetti from "canvas-confetti";
-import { QuizData, StudentScore } from "@/types";
+import { QuizData } from "@/types";
+import { INITIAL_QUIZZES } from "@/data/lessons";
+import { getStoredQuizzes } from "@/lib/storage";
+import { useUser } from "@/lib/user-context";
 import { speakChinese } from "@/lib/speech";
+import {
+  buildRound,
+  buildRoundFromKeys,
+  PracticeMode,
+  RoundItem,
+} from "@/lib/practice";
+import { itemKey, getReviewStats, recordAnswer, ReviewStats } from "@/lib/review";
 import {
   Volume2,
   Check,
@@ -11,38 +21,89 @@ import {
   Clock,
   ArrowRight,
   RotateCcw,
-  Sparkles,
   Award,
   CheckCircle2,
 } from "lucide-react";
 
 interface QuizViewProps {
-  quizzes: QuizData[];
-  currentUser: StudentScore;
-  onFinishQuiz: (correctCount: number, totalCount: number, timeBonus: number) => void;
+  /** Cuando viene, el quiz queda clavado en esa clase y se ocultan los modos. */
+  lockedLesson?: number;
 }
 
-export const QuizView: React.FC<QuizViewProps> = ({
-  quizzes,
-  currentUser,
-  onFinishQuiz,
-}) => {
-  const [activeQuizId, setActiveQuizId] = useState<string>(quizzes[0]?.id || "clase-02");
-  const activeQuiz = quizzes.find((q) => q.id === activeQuizId) || quizzes[0];
+const MODE_LABELS: Record<PracticeMode, string> = {
+  lesson: "Por clase",
+  mixed: "Mixto",
+  review: "Repaso",
+};
+
+export const QuizView: React.FC<QuizViewProps> = ({ lockedLesson }) => {
+  const { user, registerQuiz } = useUser();
+  const [quizzes, setQuizzes] = useState<QuizData[]>(INITIAL_QUIZZES);
+  const [mode, setMode] = useState<PracticeMode>("lesson");
+  const [lessonQuizId, setLessonQuizId] = useState<string>("");
+
+  // Los quizzes importados por JSON viven en localStorage: solo existen en el cliente.
+  useEffect(() => {
+    setQuizzes(getStoredQuizzes());
+  }, []);
+  const [round, setRound] = useState<RoundItem[]>([]);
+  /** Ronda de repaso de las falladas: cambia el copy del header. */
+  const [isRetryRound, setIsRetryRound] = useState<boolean>(false);
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
   const [correctAnswersCount, setCorrectAnswersCount] = useState<number>(0);
+  const [wrongKeys, setWrongKeys] = useState<string[]>([]);
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
+  const [stats, setStats] = useState<ReviewStats | null>(null);
 
   const explanationRef = useRef<HTMLDivElement>(null);
+
+  /** Todas las preguntas del curso, para las métricas de repaso. */
+  const allKeys = useMemo(
+    () => quizzes.flatMap((q) => q.questions.map((question) => itemKey(q.id, question.id))),
+    [quizzes]
+  );
+
+  const refreshStats = useCallback(() => {
+    setStats(getReviewStats(allKeys));
+  }, [allKeys]);
+
+  const startRound = useCallback((items: RoundItem[], retry = false) => {
+    setRound(items);
+    setIsRetryRound(retry);
+    setCurrentIndex(0);
+    setSelectedAnswer(null);
+    setIsAnswered(false);
+    setCorrectAnswersCount(0);
+    setWrongKeys([]);
+    setIsFinished(false);
+    setElapsedSeconds(0);
+  }, []);
+
+  /** Id del quiz que se está practicando: el de la clase fija, el elegido, o el primero. */
+  const resolveQuizId = useCallback(() => {
+    if (lockedLesson !== undefined) {
+      return quizzes.find((q) => q.lesson_number === lockedLesson)?.id || "";
+    }
+    return quizzes.some((q) => q.id === lessonQuizId) ? lessonQuizId : quizzes[0]?.id || "";
+  }, [quizzes, lockedLesson, lessonQuizId]);
+
+  // El armado de la ronda mezcla al azar: tiene que correr en el cliente, después de montar.
+  useEffect(() => {
+    if (quizzes.length === 0) return;
+    const quizId = resolveQuizId();
+    if (lockedLesson !== undefined && !quizId) return;
+    startRound(buildRound(quizzes, lockedLesson !== undefined ? "lesson" : mode, quizId));
+    refreshStats();
+  }, [quizzes, mode, lockedLesson, resolveQuizId, startRound, refreshStats]);
 
   // Timer
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
-    if (!isFinished) {
+    if (!isFinished && round.length > 0) {
       interval = setInterval(() => {
         setElapsedSeconds((prev) => prev + 1);
       }, 1000);
@@ -50,40 +111,25 @@ export const QuizView: React.FC<QuizViewProps> = ({
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isFinished]);
+  }, [isFinished, round.length]);
 
-  // Reset state when switching quiz
-  const handleQuizChange = (quizId: string) => {
-    setActiveQuizId(quizId);
-    setCurrentIndex(0);
-    setSelectedAnswer(null);
-    setIsAnswered(false);
-    setCorrectAnswersCount(0);
-    setIsFinished(false);
-    setElapsedSeconds(0);
-  };
-
-  const handleRestartQuiz = () => {
-    setCurrentIndex(0);
-    setSelectedAnswer(null);
-    setIsAnswered(false);
-    setCorrectAnswersCount(0);
-    setIsFinished(false);
-    setElapsedSeconds(0);
-  };
-
-  const currentQuestion = activeQuiz?.questions[currentIndex];
+  const current = round[currentIndex];
 
   const handleSelectOption = (option: string) => {
-    if (isAnswered || !currentQuestion) return;
+    if (isAnswered || !current) return;
 
     setSelectedAnswer(option);
     setIsAnswered(true);
 
-    const isCorrect = option === currentQuestion.correct_answer;
+    const isCorrect = option === current.question.correct_answer;
     if (isCorrect) {
       setCorrectAnswersCount((prev) => prev + 1);
+    } else {
+      setWrongKeys((prev) => (prev.includes(current.key) ? prev : [...prev, current.key]));
     }
+
+    // Leitner: acertar sube de caja y la aleja, errar la manda a la caja 1 y vuelve hoy.
+    recordAnswer(current.key, isCorrect);
 
     // Smooth scroll into explanation & continue button on mobile
     setTimeout(() => {
@@ -92,26 +138,33 @@ export const QuizView: React.FC<QuizViewProps> = ({
   };
 
   const handleNextQuestion = () => {
-    if (currentIndex < activeQuiz.questions.length - 1) {
+    if (currentIndex < round.length - 1) {
       setCurrentIndex((prev) => prev + 1);
       setSelectedAnswer(null);
       setIsAnswered(false);
     } else {
-      // Quiz finished
       setIsFinished(true);
-      const isPerfectScore = correctAnswersCount === activeQuiz.questions.length;
-      if (isPerfectScore) {
+      refreshStats();
+      if (correctAnswersCount === round.length) {
         confetti({
           particleCount: 80,
           spread: 70,
           origin: { y: 0.6 },
         });
       }
-      onFinishQuiz(correctAnswersCount, activeQuiz.questions.length, 0);
+      registerQuiz(correctAnswersCount, round.length, 0);
     }
   };
 
-  if (!activeQuiz || !currentQuestion) {
+  const handleRestartRound = () => {
+    startRound(buildRound(quizzes, lockedLesson !== undefined ? "lesson" : mode, resolveQuizId()));
+  };
+
+  const handleRetryWrong = () => {
+    startRound(buildRoundFromKeys(quizzes, wrongKeys), true);
+  };
+
+  if (quizzes.length === 0) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-12 text-center">
         <p className="text-text-muted text-sm">No hay cuestionarios disponibles.</p>
@@ -119,33 +172,84 @@ export const QuizView: React.FC<QuizViewProps> = ({
     );
   }
 
-  const progress = Math.round(((currentIndex + (isAnswered ? 1 : 0)) / activeQuiz.questions.length) * 100);
+  const activeQuiz = quizzes.find((q) => q.id === resolveQuizId()) || quizzes[0];
+  const showModes = lockedLesson === undefined;
+  const headerTitle = isRetryRound
+    ? "Repaso de las que fallaste"
+    : mode === "lesson"
+      ? activeQuiz.title
+      : mode === "mixed"
+        ? "Práctica mixta — todas las clases"
+        : "Repaso del día";
+
+  const headerHint =
+    mode === "mixed"
+      ? "Preguntas salteadas de todas las clases: así se parece más al examen."
+      : mode === "review"
+        ? "Lo vencido y lo que nunca respondiste, primero lo más atrasado."
+        : null;
+
+  if (round.length === 0) {
+    return (
+      <div className="max-w-2xl mx-auto px-2 sm:px-4 py-4 sm:py-6 space-y-4">
+        {showModes && <ModeSwitch mode={mode} setMode={setMode} dueCount={stats?.due ?? 0} />}
+        <div className="glass-card rounded-3xl p-8 text-center space-y-3">
+          <p className="text-sm font-bold text-foreground">
+            {mode === "review" ? "Nada para repasar por ahora" : "Preparando la ronda…"}
+          </p>
+          {mode === "review" && stats?.nextDue && (
+            <p className="text-xs text-text-secondary">
+              Lo próximo vence el{" "}
+              {new Date(stats.nextDue).toLocaleDateString("es-AR", {
+                day: "numeric",
+                month: "long",
+              })}
+              . Mientras tanto podés practicar por clase o en mixto.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (!current) return null;
+
+  const question = current.question;
+  const progress = Math.round(((currentIndex + (isAnswered ? 1 : 0)) / round.length) * 100);
+  const showLessonChip = showModes && (isRetryRound || mode !== "lesson");
 
   return (
     <div className="max-w-2xl mx-auto px-2 sm:px-4 py-4 sm:py-6 space-y-4">
-      {/* Header with Selector */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border">
-        <div>
-          <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[11px] tracking-wide uppercase">
-            Cuestionario
-          </span>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground mt-0.5">
-            {activeQuiz.title}
-          </h1>
+      {/* Header with mode + lesson selector */}
+      <div className="space-y-3 pb-3 border-b border-border">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[11px] tracking-wide uppercase">
+              Cuestionario
+            </span>
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground mt-0.5">
+              {headerTitle}
+            </h1>
+          </div>
+
+          {showModes && mode === "lesson" && quizzes.length > 1 && (
+            <select
+              value={activeQuiz.id}
+              onChange={(e) => setLessonQuizId(e.target.value)}
+              className="px-3 py-1.5 rounded-xl border border-border bg-bg-card font-semibold text-base sm:text-xs text-foreground outline-none cursor-pointer shadow-sm max-w-full"
+            >
+              {quizzes.map((q) => (
+                <option key={q.id} value={q.id}>
+                  Clase {q.lesson_number}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
 
-        {quizzes.length > 1 && (
-          <select
-            value={activeQuizId}
-            onChange={(e) => handleQuizChange(e.target.value)}
-            className="px-3 py-1.5 rounded-xl border border-border bg-bg-card font-semibold text-base sm:text-xs text-foreground outline-none cursor-pointer shadow-sm max-w-full"
-          >
-            {quizzes.map((q) => (
-              <option key={q.id} value={q.id}>
-                Clase {q.lesson_number}
-              </option>
-            ))}
-          </select>
+        {showModes && <ModeSwitch mode={mode} setMode={setMode} dueCount={stats?.due ?? 0} />}
+        {headerHint && showModes && !isRetryRound && (
+          <p className="text-[11px] text-text-muted leading-relaxed">{headerHint}</p>
         )}
       </div>
 
@@ -156,7 +260,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
             <div className="flex items-center justify-between text-xs font-semibold text-text-secondary">
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                Pregunta {currentIndex + 1} de {activeQuiz.questions.length}
+                Pregunta {currentIndex + 1} de {round.length}
               </span>
               <span className="flex items-center gap-1.5 text-text-muted">
                 <Clock className="w-3.5 h-3.5" />
@@ -174,32 +278,38 @@ export const QuizView: React.FC<QuizViewProps> = ({
 
           {/* Question Title & Audio Button (NO PINYIN SPOILERS) */}
           <div className="space-y-2.5 pt-1">
+            {showLessonChip && (
+              <span className="inline-block px-2 py-0.5 rounded-lg bg-bg-secondary border border-border text-[10px] font-bold text-text-muted uppercase tracking-wider">
+                Clase 0{current.lessonNumber}
+              </span>
+            )}
+
             <h2 className="text-lg sm:text-xl font-bold text-foreground leading-snug">
-              {currentQuestion.question}
+              {question.question}
             </h2>
 
             {/* If question contains a Chinese character prompt, allow listening to character ONLY */}
-            {currentQuestion.hanzi && (
+            {question.hanzi && (
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => speakChinese(currentQuestion.hanzi!)}
+                  onClick={() => speakChinese(question.hanzi!)}
                   className="inline-flex items-center gap-2 px-3 min-h-11 rounded-xl bg-bg-secondary hover:bg-bg-tertiary border border-border text-xs font-bold text-foreground transition-all cursor-pointer shadow-sm active:scale-95"
                   title="Escuchar carácter"
                 >
                   <Volume2 className="w-3.5 h-3.5 text-emerald-500" />
-                  <span className="font-chinese text-sm">{currentQuestion.hanzi}</span>
+                  <span className="font-chinese text-sm">{question.hanzi}</span>
                   <span className="text-[11px] text-text-muted font-normal">(Escuchar)</span>
                 </button>
               </div>
             )}
           </div>
 
-          {/* Options List */}
+          {/* Options List — el orden se mezcla por ronda: si quedara fijo se aprende la posición */}
           <div className="grid grid-cols-1 gap-2.5 pt-1">
-            {currentQuestion.options.map((option, idx) => {
+            {current.options.map((option, idx) => {
               const isSelected = selectedAnswer === option;
-              const isCorrectOption = option === currentQuestion.correct_answer;
+              const isCorrectOption = option === question.correct_answer;
 
               let cardClasses =
                 "border-border bg-bg-secondary hover:bg-bg-tertiary hover:border-border-strong text-foreground";
@@ -222,11 +332,11 @@ export const QuizView: React.FC<QuizViewProps> = ({
                 badgeClasses = "bg-emerald-500 text-white font-bold border-transparent";
               }
 
-              const isChineseOption = /[\u4e00-\u9fa5]/.test(option);
+              const isChineseOption = /[一-龥]/.test(option);
 
               return (
                 <div
-                  key={idx}
+                  key={option}
                   onClick={() => !isAnswered && handleSelectOption(option)}
                   className={`w-full p-3.5 sm:p-4 rounded-2xl border text-left flex items-center justify-between gap-3 text-sm sm:text-base font-medium transition-all duration-200 min-h-[52px] select-none ${cardClasses} ${
                     !isAnswered ? "cursor-pointer active:scale-[0.99]" : "cursor-default"
@@ -280,7 +390,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
               className="p-4 sm:p-5 rounded-2xl bg-bg-secondary border border-border space-y-4 animate-apple-in"
             >
               <div className="flex items-center justify-between gap-2">
-                {selectedAnswer === currentQuestion.correct_answer ? (
+                {selectedAnswer === question.correct_answer ? (
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
                     <CheckCircle2 className="w-4 h-4" /> ¡Respuesta Correcta!
                   </span>
@@ -291,10 +401,10 @@ export const QuizView: React.FC<QuizViewProps> = ({
                 )}
 
                 {/* Pronunciation button of the correct answer */}
-                {(currentQuestion.hanzi || currentQuestion.correct_answer.match(/[\u4e00-\u9fa5]+/)) && (
+                {(question.hanzi || question.correct_answer.match(/[一-龥]+/)) && (
                   <button
                     type="button"
-                    onClick={() => speakChinese(currentQuestion.hanzi || currentQuestion.correct_answer)}
+                    onClick={() => speakChinese(question.hanzi || question.correct_answer)}
                     className="flex items-center gap-1.5 px-3 min-h-11 rounded-xl bg-bg-card hover:bg-bg-tertiary border border-border text-foreground hover:border-emerald-500/50 text-xs font-bold transition-all shadow-sm cursor-pointer active:scale-95"
                     title="Escuchar pronunciación de la respuesta"
                   >
@@ -304,10 +414,10 @@ export const QuizView: React.FC<QuizViewProps> = ({
                 )}
               </div>
 
-              {currentQuestion.explanation && (
+              {question.explanation && (
                 <p className="text-xs sm:text-sm text-text-secondary leading-relaxed border-t border-border/60 pt-3">
                   <strong className="text-foreground">Explicación: </strong>
-                  {currentQuestion.explanation}
+                  {question.explanation}
                 </p>
               )}
 
@@ -318,7 +428,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
                 className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all shadow-apple-glow cursor-pointer active:scale-[0.99]"
               >
                 <span>
-                  {currentIndex === activeQuiz.questions.length - 1 ? "Ver Resultados Finales" : "Siguiente Pregunta"}
+                  {currentIndex === round.length - 1 ? "Ver Resultados Finales" : "Siguiente Pregunta"}
                 </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
@@ -337,10 +447,10 @@ export const QuizView: React.FC<QuizViewProps> = ({
               ¡Completado!
             </span>
             <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-foreground">
-              ¡Gran trabajo, {currentUser.name}!
+              ¡Gran trabajo, {user.name}!
             </h2>
             <p className="text-xs sm:text-sm text-text-secondary max-w-md mx-auto">
-              Completaste la práctica de la {activeQuiz.title}.
+              {headerTitle} · {round.length} preguntas.
             </p>
           </div>
 
@@ -351,7 +461,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
                 Aciertos
               </span>
               <span className="text-lg sm:text-xl font-extrabold text-foreground mt-0.5 block">
-                {correctAnswersCount} / {activeQuiz.questions.length}
+                {correctAnswersCount} / {round.length}
               </span>
             </div>
 
@@ -360,7 +470,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
                 Precisión
               </span>
               <span className="text-lg sm:text-xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5 block">
-                {Math.round((correctAnswersCount / activeQuiz.questions.length) * 100)}%
+                {Math.round((correctAnswersCount / round.length) * 100)}%
               </span>
             </div>
 
@@ -374,14 +484,34 @@ export const QuizView: React.FC<QuizViewProps> = ({
             </div>
           </div>
 
-          {/* Retry Button */}
-          <div className="pt-2">
+          {stats && (
+            <p className="text-[11px] text-text-muted">
+              Repaso: {stats.due} pendientes · {stats.mastered} dominadas de {allKeys.length}
+            </p>
+          )}
+
+          <div className="pt-2 space-y-2.5">
+            {/* Repasar SOLO las falladas: es donde está el aprendizaje real */}
+            {wrongKeys.length > 0 && (
+              <button
+                onClick={handleRetryWrong}
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm transition-all shadow-apple-glow cursor-pointer active:scale-[0.99]"
+              >
+                <RotateCcw className="w-4 h-4" />
+                <span>
+                  {wrongKeys.length === 1
+                    ? "Repasar la que fallaste"
+                    : `Repasar las ${wrongKeys.length} que fallaste`}
+                </span>
+              </button>
+            )}
+
             <button
-              onClick={handleRestartQuiz}
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl border border-border bg-bg-secondary hover:bg-bg-tertiary text-foreground font-bold text-sm transition-all"
+              onClick={handleRestartRound}
+              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl border border-border bg-bg-secondary hover:bg-bg-tertiary text-foreground font-bold text-sm transition-all cursor-pointer active:scale-[0.99]"
             >
               <RotateCcw className="w-4 h-4 text-emerald-500" />
-              <span>Hacer el Quiz de nuevo</span>
+              <span>Ronda nueva (se vuelven a mezclar)</span>
             </button>
           </div>
         </div>
@@ -389,3 +519,34 @@ export const QuizView: React.FC<QuizViewProps> = ({
     </div>
   );
 };
+
+const ModeSwitch: React.FC<{
+  mode: PracticeMode;
+  setMode: (mode: PracticeMode) => void;
+  dueCount: number;
+}> = ({ mode, setMode, dueCount }) => (
+  <div className="grid grid-cols-3 gap-1.5 p-1 rounded-2xl bg-bg-secondary border border-border">
+    {(Object.keys(MODE_LABELS) as PracticeMode[]).map((key) => {
+      const isActive = mode === key;
+      return (
+        <button
+          key={key}
+          type="button"
+          onClick={() => setMode(key)}
+          className={`min-h-11 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer active:scale-[0.98] ${
+            isActive
+              ? "bg-bg-card text-foreground shadow-sm border border-border"
+              : "text-text-muted hover:text-foreground"
+          }`}
+        >
+          {MODE_LABELS[key]}
+          {key === "review" && dueCount > 0 && (
+            <span className="ml-1.5 px-1.5 py-0.5 rounded-md bg-emerald-500 text-white text-[10px]">
+              {dueCount}
+            </span>
+          )}
+        </button>
+      );
+    })}
+  </div>
+);

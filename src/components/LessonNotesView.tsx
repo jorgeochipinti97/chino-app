@@ -11,17 +11,14 @@ import {
   Lightbulb,
   CheckCircle2,
   Sparkles,
+  PlayCircle,
 } from "lucide-react";
 
 interface LessonNotesViewProps {
   selectedLesson?: number;
-  setSelectedLesson?: (num: number) => void;
 }
 
-export const LessonNotesView: React.FC<LessonNotesViewProps> = ({
-  selectedLesson = 2,
-  setSelectedLesson,
-}) => {
+export const LessonNotesView: React.FC<LessonNotesViewProps> = ({ selectedLesson = 2 }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const activeMaterial =
@@ -175,6 +172,42 @@ export const LessonNotesView: React.FC<LessonNotesViewProps> = ({
                   <span className="text-amber-500 font-bold select-none">•</span>
                   <span className="text-foreground">{tip}</span>
                 </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Material extra de la clase: videos, canciones, PDFs */}
+        {activeMaterial.resources && activeMaterial.resources.length > 0 && !searchQuery && (
+          <section className="rounded-2xl border border-border bg-bg-card overflow-hidden shadow-sm">
+            <div className="p-4 bg-bg-secondary/60 border-b border-border flex items-center gap-2.5">
+              <PlayCircle className="w-4 h-4 text-teal-500 shrink-0" />
+              <h3 className="text-xs sm:text-sm font-bold font-mono text-foreground uppercase tracking-wider">
+                Material de la clase
+              </h3>
+            </div>
+
+            <div className="p-4 sm:p-5 space-y-2.5">
+              {activeMaterial.resources.map((resource) => (
+                <a
+                  key={resource.url}
+                  href={resource.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-3 p-3 min-h-11 rounded-xl border border-border bg-bg-secondary/60 hover:bg-bg-secondary hover:border-teal-500/40 transition-all active:scale-[0.99]"
+                >
+                  <span className="mt-0.5 text-teal-500 font-bold select-none">↗</span>
+                  <span className="min-w-0">
+                    <span className="block font-mono text-xs font-bold text-foreground truncate">
+                      {resource.label}
+                    </span>
+                    {resource.note && (
+                      <span className="block font-mono text-[11px] text-text-muted mt-0.5">
+                        {resource.note}
+                      </span>
+                    )}
+                  </span>
+                </a>
               ))}
             </div>
           </section>

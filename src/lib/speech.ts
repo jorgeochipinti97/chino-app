@@ -1,4 +1,4 @@
-export function speakChinese(text: string) {
+export function speakChinese(text: string, rate: number = 0.85) {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) {
     console.warn("Speech synthesis not supported in this browser.");
     return;
@@ -25,7 +25,7 @@ export function speakChinese(text: string) {
 
   const utterance = new SpeechSynthesisUtterance(textToSpeak);
   utterance.lang = "zh-CN";
-  utterance.rate = 0.85; // Natural learning pace
+  utterance.rate = rate; // 0.85 = ritmo de aprendizaje; más bajo para repetir un dictado
   utterance.pitch = 1.0;
 
   const voices = window.speechSynthesis.getVoices();
