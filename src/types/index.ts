@@ -70,6 +70,12 @@ export interface LessonMaterial {
     items: LessonNoteItem[];
   }[];
   grammar_tips: string[];
+  /** Material extra de la clase (videos, canciones, PDFs). */
+  resources?: {
+    label: string;
+    url: string;
+    note?: string;
+  }[];
 }
 
 export interface StrokeCharacter {
@@ -86,4 +92,34 @@ export interface StrokeSet {
   title: string;
   description: string;
   characters: StrokeCharacter[];
+}
+
+/** Un ítem del drill de sustitución: misma oración, otro pronombre. */
+export interface SubstitutionItem {
+  id: string;
+  /** Oración de partida. Vacía cuando hay que armarla desde cero. */
+  base_hanzi: string;
+  base_pinyin: string;
+  base_meaning: string;
+  /** Lo que hay que meter en su lugar (o la consigna, si no hay oración base). */
+  swap: string;
+  swap_meaning: string;
+  /** Respuesta correcta, ficha por ficha. 们 va siempre como ficha aparte. */
+  tokens: string[];
+  /** Signo final, que el ejercicio agrega solo. */
+  punctuation?: string;
+  answer_pinyin: string;
+  answer_meaning: string;
+  /** La regla que explica el ítem, para el feedback. */
+  note?: string;
+}
+
+export interface SubstitutionSet {
+  id: string;
+  lesson_number: number;
+  title: string;
+  description: string;
+  /** Fichas posibles del set: de acá salen los distractores del banco. */
+  pool: string[];
+  items: SubstitutionItem[];
 }

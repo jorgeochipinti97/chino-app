@@ -4,6 +4,38 @@ import { StrokeSet } from "@/types";
 // Al agregar caracteres nuevos, correr: node scripts/copy-hanzi-data.mjs
 export const STROKE_SETS: StrokeSet[] = [
   {
+    id: "strokes-clase-04-numeros",
+    lesson_number: 4,
+    title: "Los números 0–10",
+    description: "Los once caracteres base. 一 二 三 son puro horizontal de arriba abajo; 十 y 八 repiten las reglas 3 y 4; 四 cierra la caja al final.",
+    characters: [
+      { hanzi: "零", pinyin: "líng", meaning: "Cero" },
+      { hanzi: "一", pinyin: "yī", meaning: "Uno", rule: "1 trazo · un 横 de izquierda a derecha" },
+      { hanzi: "二", pinyin: "èr", meaning: "Dos", rule: "1 · De arriba hacia abajo (从上到下)" },
+      { hanzi: "三", pinyin: "sān", meaning: "Tres", rule: "1 · De arriba hacia abajo (从上到下)" },
+      { hanzi: "四", pinyin: "sì", meaning: "Cuatro", rule: "Caja 囗 · el cierre de abajo va último" },
+      { hanzi: "五", pinyin: "wǔ", meaning: "Cinco" },
+      { hanzi: "六", pinyin: "liù", meaning: "Seis" },
+      { hanzi: "七", pinyin: "qī", meaning: "Siete" },
+      { hanzi: "八", pinyin: "bā", meaning: "Ocho", rule: "4 · Primero 撇, luego 捺 (先撇后捺)" },
+      { hanzi: "九", pinyin: "jiǔ", meaning: "Nueve" },
+      { hanzi: "十", pinyin: "shí", meaning: "Diez", rule: "3 · Primero horizontal, luego vertical (先横后竖)" },
+    ],
+  },
+  {
+    id: "strokes-clase-04-dialogo",
+    lesson_number: 4,
+    title: "Palabras del diálogo 你好吗",
+    description: "Los caracteres nuevos del saludo: la partícula de pregunta, la que rebota la pregunta, «muy» y «también».",
+    characters: [
+      { hanzi: "吗", pinyin: "ma", meaning: "Partícula de pregunta (你好吗？)" },
+      { hanzi: "呢", pinyin: "ne", meaning: "¿Y vos? (你呢？)" },
+      { hanzi: "很", pinyin: "hěn", meaning: "Muy (我很好)" },
+      { hanzi: "也", pinyin: "yě", meaning: "También (我也很好)" },
+      { hanzi: "不", pinyin: "bù", meaning: "No — negación (我不好)" },
+    ],
+  },
+  {
     id: "strokes-clase-03-pronombres",
     lesson_number: 3,
     title: "Pronombres personales",

@@ -298,6 +298,239 @@ export const INITIAL_QUIZZES: QuizData[] = [
         pinyin: "tā / tā"
       }
     ]
+  },
+  {
+    id: "clase-04",
+    lesson_number: 4,
+    title: "Quiz - Clase 4 de Chino",
+    description: "Números 0–10 (零 一 二 三 四 五 六 七 八 九 十) y la composición hasta 99 con 十 (十五 vs 五十, 二十一, 九十九).",
+    total_questions: 16,
+    questions: [
+      {
+        id: 1,
+        question: "¿Cuál es el caracter del número 5?",
+        options: [
+          "四 (sì)",
+          "五 (wǔ)",
+          "六 (liù)",
+          "九 (jiǔ)"
+        ],
+        correct_answer: "五 (wǔ)",
+        explanation: "五 (wǔ) es 5, en 3er tono. En clase se aproximó como «uu».",
+        hanzi: "五",
+        pinyin: "wǔ"
+      },
+      {
+        id: 2,
+        question: "¿Qué número es 七?",
+        options: [
+          "6",
+          "7",
+          "8",
+          "10"
+        ],
+        correct_answer: "7",
+        explanation: "七 (qī) es 7 y suena parecido a «chi». No confundir con 十 (shí, 10).",
+        hanzi: "七",
+        pinyin: "qī"
+      },
+      {
+        id: 3,
+        question: "¿Cómo se escribe el 15?",
+        options: [
+          "五十 (wǔshí)",
+          "十五 (shíwǔ)",
+          "一五 (yīwǔ)",
+          "十五十 (shíwǔshí)"
+        ],
+        correct_answer: "十五 (shíwǔ)",
+        explanation: "Del 11 al 19 el 十 va PRIMERO: 十五 = 10 + 5 = 15. Al revés, 五十 sería 5 × 10 = 50.",
+        hanzi: "十五",
+        pinyin: "shíwǔ"
+      },
+      {
+        id: 4,
+        question: "¿Qué número es 二十一?",
+        options: [
+          "12",
+          "21",
+          "201",
+          "210"
+        ],
+        correct_answer: "21",
+        explanation: "二十一 (èr shí yī) = 2 × 10 + 1 = 21. La fórmula es decena + 十 + unidad.",
+        hanzi: "二十一",
+        pinyin: "èr shí yī"
+      },
+      {
+        id: 5,
+        question: "¿Cómo se dice 50?",
+        options: [
+          "十五 (shíwǔ)",
+          "五十 (wǔshí)",
+          "五五 (wǔwǔ)",
+          "十十五 (shíshíwǔ)"
+        ],
+        correct_answer: "五十 (wǔshí)",
+        explanation: "Las decenas son unidad + 十: 五十 = 5 × 10 = 50. El 十 atrás multiplica, adelante suma.",
+        hanzi: "五十",
+        pinyin: "wǔshí"
+      },
+      {
+        id: 6,
+        question: "¿Cómo se escribe el número 10?",
+        options: [
+          "一十 (yīshí)",
+          "十 (shí)",
+          "十零 (shílíng)",
+          "零十 (língshí)"
+        ],
+        correct_answer: "十 (shí)",
+        explanation: "El 10 es 十 solo. Aunque sea una decena, nunca se le pone 一 adelante.",
+        hanzi: "十",
+        pinyin: "shí"
+      },
+      {
+        id: 7,
+        question: "En jiǔ (九, nueve), ¿cómo suena la 'j' del pīnyīn?",
+        options: [
+          "Como la jota española de 'jarra'",
+          "Como una 'y' suave: «yioo»",
+          "Como una 'sh': «shioo»",
+          "Como una 'g' de 'gato'"
+        ],
+        correct_answer: "Como una 'y' suave: «yioo»",
+        explanation: "La j del pīnyīn nunca es la jota española: es palatal y suave. Misma j que en 叫 (jiào, llamarse) de la clase 2.",
+        hanzi: "九",
+        pinyin: "jiǔ"
+      },
+      {
+        id: 8,
+        question: "¿Cómo se escribe el 99?",
+        options: [
+          "九九 (jiǔjiǔ)",
+          "九十九 (jiǔshíjiǔ)",
+          "十九九 (shíjiǔjiǔ)",
+          "九十 (jiǔshí)"
+        ],
+        correct_answer: "九十九 (jiǔshíjiǔ)",
+        explanation: "九十九 = 9 × 10 + 9 = 99. Es el número más alto que se arma solo con 十.",
+        hanzi: "九十九",
+        pinyin: "jiǔshíjiǔ"
+      },
+      {
+        id: 9,
+        question: "四 (sì) y 十 (shí) se confunden al escuchar. ¿Cuál de los dos es el 4?",
+        options: [
+          "十 (shí)",
+          "四 (sì)",
+          "四 es 10 y 十 es 4",
+          "Los dos significan 4"
+        ],
+        correct_answer: "四 (sì)",
+        explanation: "四 = 4, con s suave («ss»). 十 = 10, con sh («shi»). Es la confusión clásica de los números.",
+        hanzi: "四 / 十",
+        pinyin: "sì / shí"
+      },
+      {
+        id: 10,
+        question: "¿Cómo se dice 'cero'?",
+        options: [
+          "六 (liù)",
+          "零 (líng)",
+          "七 (qī)",
+          "十 (shí)"
+        ],
+        correct_answer: "零 (líng)",
+        explanation: "零 (líng) es el 0, en 2do tono. No confundir con 六 (liù, 6), que suena «lio».",
+        hanzi: "零",
+        pinyin: "líng"
+      },
+      {
+        id: 11,
+        question: "¿Cómo se convierte 你好 (hola) en la pregunta «¿cómo estás?»",
+        options: [
+          "Agregando 吗 al final: 你好吗？",
+          "Agregando 呢 al final: 你好呢？",
+          "Cambiando el orden: 好你？",
+          "Agregando 很 adelante: 很你好？"
+        ],
+        correct_answer: "Agregando 吗 al final: 你好吗？",
+        explanation: "吗 (ma) al final convierte una afirmación en pregunta de sí/no. El orden de la oración no se toca.",
+        hanzi: "你好吗？",
+        pinyin: "Nǐ hǎo ma?"
+      },
+      {
+        id: 12,
+        question: "林娜 contesta «我很好，你呢？». ¿Qué hace el 呢?",
+        options: [
+          "Devuelve la misma pregunta sin repetirla entera",
+          "Niega lo que se dijo antes",
+          "Marca el plural, como 们",
+          "Indica que la acción ya pasó"
+        ],
+        correct_answer: "Devuelve la misma pregunta sin repetirla entera",
+        explanation: "呢 (ne) rebota la pregunta: 你呢？ equivale a «¿y vos?». Alcanza con el pronombre + 呢.",
+        hanzi: "你呢？",
+        pinyin: "Nǐ ne?"
+      },
+      {
+        id: 13,
+        question: "¿Cómo se dice «yo también estoy muy bien»?",
+        options: [
+          "我也很好。",
+          "也我很好。",
+          "我很好也。",
+          "很好我也。"
+        ],
+        correct_answer: "我也很好。",
+        explanation: "也 (yě, también) va DESPUÉS del sujeto y ANTES del adjetivo: sujeto + 也 + 很 + adjetivo.",
+        hanzi: "我也很好",
+        pinyin: "Wǒ yě hěn hǎo"
+      },
+      {
+        id: 14,
+        question: "Si el sujeto de 你好吗？ pasa a ser 他们 (ellos), ¿cómo queda la oración?",
+        options: [
+          "他们好吗？",
+          "他好吗们？",
+          "好吗他们？",
+          "他们好们吗？"
+        ],
+        correct_answer: "他们好吗？",
+        explanation: "Se cambia solo el pronombre: el verbo no se conjuga, así que 好吗？ queda intacto.",
+        hanzi: "他们好吗？",
+        pinyin: "Tāmen hǎo ma?"
+      },
+      {
+        id: 15,
+        question: "¿Cómo se dice «no estoy bien»?",
+        options: [
+          "我不好。",
+          "我不很好。",
+          "我好不。",
+          "不我好。"
+        ],
+        correct_answer: "我不好。",
+        explanation: "不 (bù) va entre el sujeto y el adjetivo. Al negar, el 很 desaparece: 我很好 → 我不好.",
+        hanzi: "我不好",
+        pinyin: "Wǒ bù hǎo"
+      },
+      {
+        id: 16,
+        question: "Si te preguntan 你好吗？ y NO estás bien, ¿qué contestás?",
+        options: [
+          "我不好。",
+          "我不好吗？",
+          "不很好我。",
+          "我们不好吗？"
+        ],
+        correct_answer: "我不好。",
+        explanation: "El 吗 es la partícula que arma la pregunta: en la respuesta no va. Queda 我不好。",
+        hanzi: "我不好",
+        pinyin: "Wǒ bù hǎo"
+      }
+    ]
   }
 ];
 
@@ -599,6 +832,463 @@ export const LESSON_MATERIALS: LessonMaterial[] = [
       "们 va siempre DESPUÉS de la palabra: 老师们, nunca 们老师.",
       "她们 se usa cuando el grupo es solo de mujeres. Si hay al menos un hombre, se usa 他们.",
       "Orden de trazos: arriba→abajo, izquierda→derecha, horizontal antes que vertical, 撇 antes que 捺."
+    ]
+  },
+  {
+    id: "mat-clase-04",
+    lesson_number: 4,
+    title: "Clase 4: Los Números (0–99) y el saludo 你好吗？",
+    summary: "Los once caracteres base (零 一 二 三 四 五 六 七 八 九 十) con la pronunciación aproximada dada en clase y la regla de composición (十 adelante suma, atrás multiplica), más el diálogo 你好吗？ del libro y el ejercicio de sustituir el pronombre.",
+    sections: [
+      {
+        title: "1. Números 0–10",
+        description: "La base de todo el sistema. Entre paréntesis, la aproximación fonética que se dio en clase.",
+        items: [
+          {
+            pinyin: "líng",
+            hanzi: "零",
+            type: "0",
+            pronunciation: "«ling» (2do tono)",
+            meaning: "Cero"
+          },
+          {
+            pinyin: "yī",
+            hanzi: "一",
+            type: "1",
+            pronunciation: "«ii» — i larga (1er tono)",
+            meaning: "Uno"
+          },
+          {
+            pinyin: "èr",
+            hanzi: "二",
+            type: "2",
+            pronunciation: "«ar» — la r va enroscada, no la r española (4to tono)",
+            meaning: "Dos"
+          },
+          {
+            pinyin: "sān",
+            hanzi: "三",
+            type: "3",
+            pronunciation: "«san» (1er tono)",
+            meaning: "Tres"
+          },
+          {
+            pinyin: "sì",
+            hanzi: "四",
+            type: "4",
+            pronunciation: "«ss» / «se» con la s suave (4to tono)",
+            meaning: "Cuatro"
+          },
+          {
+            pinyin: "wǔ",
+            hanzi: "五",
+            type: "5",
+            pronunciation: "«uu» (3er tono)",
+            meaning: "Cinco"
+          },
+          {
+            pinyin: "liù",
+            hanzi: "六",
+            type: "6",
+            pronunciation: "«lio» (4to tono)",
+            meaning: "Seis"
+          },
+          {
+            pinyin: "qī",
+            hanzi: "七",
+            type: "7",
+            pronunciation: "«chi» (1er tono)",
+            meaning: "Siete"
+          },
+          {
+            pinyin: "bā",
+            hanzi: "八",
+            type: "8",
+            pronunciation: "«baa» (1er tono)",
+            meaning: "Ocho"
+          },
+          {
+            pinyin: "jiǔ",
+            hanzi: "九",
+            type: "9",
+            pronunciation: "«yioo» — la j no es jota (3er tono)",
+            meaning: "Nueve"
+          },
+          {
+            pinyin: "shí",
+            hanzi: "十",
+            type: "10",
+            pronunciation: "«shi» (2do tono)",
+            meaning: "Diez"
+          }
+        ]
+      },
+      {
+        title: "2. Del 11 al 19 — 十 + unidad",
+        description: "El 十 va adelante y la unidad atrás. No se agrega 一 delante del 十.",
+        items: [
+          {
+            pinyin: "shíyī",
+            hanzi: "十一",
+            type: "10 + 1",
+            pronunciation: "shi-ii",
+            meaning: "Once"
+          },
+          {
+            pinyin: "shí'èr",
+            hanzi: "十二",
+            type: "10 + 2",
+            pronunciation: "shi-ar",
+            meaning: "Doce"
+          },
+          {
+            pinyin: "shíwǔ",
+            hanzi: "十五",
+            type: "10 + 5",
+            pronunciation: "shi-uu",
+            meaning: "Quince"
+          },
+          {
+            pinyin: "shíqī",
+            hanzi: "十七",
+            type: "10 + 7",
+            pronunciation: "shi-chi",
+            meaning: "Diecisiete"
+          },
+          {
+            pinyin: "shíbā",
+            hanzi: "十八",
+            type: "10 + 8",
+            pronunciation: "shi-baa",
+            meaning: "Dieciocho"
+          },
+          {
+            pinyin: "shíjiǔ",
+            hanzi: "十九",
+            type: "10 + 9",
+            pronunciation: "shi-yioo",
+            meaning: "Diecinueve"
+          }
+        ]
+      },
+      {
+        title: "3. Las decenas — unidad + 十",
+        description: "Acá el 十 va atrás y multiplica: 五十 = 5 × 10.",
+        items: [
+          {
+            pinyin: "èrshí",
+            hanzi: "二十",
+            type: "2 × 10",
+            pronunciation: "ar-shi",
+            meaning: "Veinte"
+          },
+          {
+            pinyin: "sānshí",
+            hanzi: "三十",
+            type: "3 × 10",
+            pronunciation: "san-shi",
+            meaning: "Treinta"
+          },
+          {
+            pinyin: "sìshí",
+            hanzi: "四十",
+            type: "4 × 10",
+            pronunciation: "ss-shi",
+            meaning: "Cuarenta"
+          },
+          {
+            pinyin: "wǔshí",
+            hanzi: "五十",
+            type: "5 × 10",
+            pronunciation: "uu-shi",
+            meaning: "Cincuenta"
+          },
+          {
+            pinyin: "liùshí",
+            hanzi: "六十",
+            type: "6 × 10",
+            pronunciation: "lio-shi",
+            meaning: "Sesenta"
+          },
+          {
+            pinyin: "qīshí",
+            hanzi: "七十",
+            type: "7 × 10",
+            pronunciation: "chi-shi",
+            meaning: "Setenta"
+          },
+          {
+            pinyin: "bāshí",
+            hanzi: "八十",
+            type: "8 × 10",
+            pronunciation: "baa-shi",
+            meaning: "Ochenta"
+          },
+          {
+            pinyin: "jiǔshí",
+            hanzi: "九十",
+            type: "9 × 10",
+            pronunciation: "yioo-shi",
+            meaning: "Noventa"
+          }
+        ]
+      },
+      {
+        title: "4. De 21 a 99 — decena + 十 + unidad",
+        description: "Una sola fórmula cubre todo el tramo: se lee igual que la cuenta aritmética.",
+        items: [
+          {
+            pinyin: "èr shí yī",
+            hanzi: "二十一",
+            type: "2 × 10 + 1",
+            pronunciation: "ar-shi-ii",
+            meaning: "Veintiuno"
+          },
+          {
+            pinyin: "sānshíwǔ",
+            hanzi: "三十五",
+            type: "3 × 10 + 5",
+            pronunciation: "san-shi-uu",
+            meaning: "Treinta y cinco"
+          },
+          {
+            pinyin: "sìshíbā",
+            hanzi: "四十八",
+            type: "4 × 10 + 8",
+            pronunciation: "ss-shi-baa",
+            meaning: "Cuarenta y ocho"
+          },
+          {
+            pinyin: "liùshíqī",
+            hanzi: "六十七",
+            type: "6 × 10 + 7",
+            pronunciation: "lio-shi-chi",
+            meaning: "Sesenta y siete"
+          },
+          {
+            pinyin: "jiǔshíjiǔ",
+            hanzi: "九十九",
+            type: "9 × 10 + 9",
+            pronunciation: "yioo-shi-yioo",
+            meaning: "Noventa y nueve — el tope que se arma solo con 十"
+          }
+        ]
+      },
+      {
+        title: "5. Trazos de los números",
+        description: "Son los caracteres más simples del idioma y repiten las reglas de orden de la clase 3.",
+        items: [
+          {
+            pinyin: "yī",
+            hanzi: "一",
+            type: "1 trazo",
+            pronunciation: "Un solo 横 (horizontal), de izquierda a derecha",
+            meaning: "Uno — el trazo básico de todo el sistema"
+          },
+          {
+            pinyin: "èr",
+            hanzi: "二",
+            type: "2 trazos",
+            pronunciation: "Dos horizontales: primero el de arriba (从上到下)",
+            meaning: "Dos"
+          },
+          {
+            pinyin: "sān",
+            hanzi: "三",
+            type: "3 trazos",
+            pronunciation: "Tres horizontales, siempre de arriba hacia abajo",
+            meaning: "Tres"
+          },
+          {
+            pinyin: "shí",
+            hanzi: "十",
+            type: "2 trazos",
+            pronunciation: "先横后竖: primero el horizontal, después el vertical",
+            meaning: "Diez — el ejemplo de la regla 3 de la clase pasada"
+          },
+          {
+            pinyin: "bā",
+            hanzi: "八",
+            type: "2 trazos",
+            pronunciation: "先撇后捺: primero la diagonal izquierda, después la derecha",
+            meaning: "Ocho — el ejemplo de la regla 4"
+          },
+          {
+            pinyin: "sì",
+            hanzi: "四",
+            type: "5 trazos",
+            pronunciation: "Caja 囗: vertical izquierdo, horizontal+vertical derecho, el interior, y el cierre de abajo AL FINAL",
+            meaning: "Cuatro — la caja se cierra último"
+          }
+        ]
+      },
+      {
+        title: "6. El diálogo del libro — 你好吗？",
+        description: "力波 (Lì Bō) saluda a 林娜 (Lín Nà). Tres líneas que se usan enteras.",
+        items: [
+          {
+            pinyin: "Lín Nà, nǐ hǎo ma?",
+            hanzi: "林娜，你好吗？",
+            type: "力波",
+            pronunciation: "lin na, ni hao ma",
+            meaning: "Lín Nà, ¿cómo estás?"
+          },
+          {
+            pinyin: "Wǒ hěn hǎo, nǐ ne?",
+            hanzi: "我很好，你呢？",
+            type: "林娜",
+            pronunciation: "uo hen hao, ni ne",
+            meaning: "Estoy muy bien, ¿y vos?"
+          },
+          {
+            pinyin: "Yě hěn hǎo.",
+            hanzi: "也很好。",
+            type: "力波",
+            pronunciation: "ie hen hao",
+            meaning: "(Yo) también estoy muy bien"
+          }
+        ]
+      },
+      {
+        title: "7. Palabras nuevas del diálogo",
+        description: "Cuatro piezas que arman preguntas y respuestas sin tocar el orden de la oración.",
+        items: [
+          {
+            pinyin: "ma",
+            hanzi: "吗",
+            type: "Partícula de pregunta",
+            pronunciation: "ma (tono neutro, al final de la oración)",
+            meaning: "Convierte una afirmación en pregunta de sí/no: 你好 → 你好吗？"
+          },
+          {
+            pinyin: "ne",
+            hanzi: "呢",
+            type: "Partícula",
+            pronunciation: "ne (tono neutro, al final)",
+            meaning: "Devuelve la pregunta sin repetirla: 你呢？= ¿y vos?"
+          },
+          {
+            pinyin: "hěn",
+            hanzi: "很",
+            type: "Adverbio",
+            pronunciation: "hen (3er tono)",
+            meaning: "Muy — acompaña al adjetivo: 我很好"
+          },
+          {
+            pinyin: "yě",
+            hanzi: "也",
+            type: "Adverbio",
+            pronunciation: "ie (3er tono)",
+            meaning: "También — va ANTES del adjetivo o verbo: 我也很好"
+          }
+        ]
+      },
+      {
+        title: "8. Sustitución de pronombres",
+        description: "El ejercicio de la clase: cambiar el pronombre y dejar el resto igual.",
+        items: [
+          {
+            pinyin: "nǐ hǎo ma → tā hǎo ma",
+            hanzi: "你好吗？→ 他好吗？",
+            type: "Singular",
+            pronunciation: "ni hao ma → ta hao ma",
+            meaning: "¿Cómo estás? → ¿Cómo está él?"
+          },
+          {
+            pinyin: "nǐ hǎo ma → nǐmen hǎo ma",
+            hanzi: "你好吗？→ 你们好吗？",
+            type: "Plural con 们",
+            pronunciation: "ni hao ma → ni-men hao ma",
+            meaning: "¿Cómo estás? → ¿Cómo están ustedes?"
+          },
+          {
+            pinyin: "wǒ hěn hǎo → wǒmen hěn hǎo",
+            hanzi: "我很好。→ 我们很好。",
+            type: "Plural con 们",
+            pronunciation: "uo hen hao → uo-men hen hao",
+            meaning: "Estoy muy bien → Estamos muy bien"
+          },
+          {
+            pinyin: "nǐ ne → tāmen ne",
+            hanzi: "你呢？→ 他们呢？",
+            type: "Plural con 们",
+            pronunciation: "ni ne → ta-men ne",
+            meaning: "¿Y vos? → ¿Y ellos?"
+          },
+          {
+            pinyin: "tā hǎo ma",
+            hanzi: "它好吗？",
+            type: "⚠️ EXCEPCIÓN",
+            pronunciation: "它们好吗？ NO existe",
+            meaning: "Con 它 (cosa/animal) el 们 no se agrega — es la pregunta de examen de la clase 3"
+          }
+        ]
+      },
+      {
+        title: "9. La negación con 不",
+        description: "不 (bù) va delante del adjetivo o el verbo — y se lleva puesto el 很.",
+        items: [
+          {
+            pinyin: "Wǒ bù hǎo.",
+            hanzi: "我不好。",
+            type: "Negación",
+            pronunciation: "uo bu hao",
+            meaning: "No estoy bien"
+          },
+          {
+            pinyin: "wǒ hěn hǎo → wǒ bù hǎo",
+            hanzi: "我很好。→ 我不好。",
+            type: "⚠️ El 很 se cae",
+            pronunciation: "我不很好 NO se dice",
+            meaning: "Al negar, 不 ocupa el lugar de 很"
+          },
+          {
+            pinyin: "Tā bù hǎo.",
+            hanzi: "他不好。",
+            type: "Otro sujeto",
+            pronunciation: "ta bu hao",
+            meaning: "Él no está bien"
+          },
+          {
+            pinyin: "Wǒmen bù hǎo.",
+            hanzi: "我们不好。",
+            type: "Plural",
+            pronunciation: "uo-men bu hao",
+            meaning: "No estamos bien — 不 va después del 们"
+          },
+          {
+            pinyin: "Nǐ hǎo ma? → Wǒ bù hǎo.",
+            hanzi: "你好吗？→ 我不好。",
+            type: "Respuesta al diálogo",
+            pronunciation: "el 吗 no vuelve en la respuesta",
+            meaning: "¿Cómo estás? → No estoy bien"
+          }
+        ]
+      }
+    ],
+    grammar_tips: [
+      "La fórmula es aritmética pura: 二十一 = 2 × 10 + 1 = 21. Decena + 十 + unidad, sin excepciones hasta el 99.",
+      "⚠️ El orden cambia el número: 十五 = 15 (10 + 5) pero 五十 = 50 (5 × 10). El 十 adelante SUMA, atrás MULTIPLICA.",
+      "El 10 es 十 solo. Nunca 一十, aunque sea una decena.",
+      "⚠️ 四 (sì, 4) vs 十 (shí, 10) es la confusión clásica: 四 va con s suave, 十 con sh.",
+      "九 (jiǔ) no lleva jota española — la j del pīnyīn es suave, «yioo». Es la misma j de 叫 (jiào) de la clase 2.",
+      "二 (èr, 2) es el único número con esa r enroscada: «ar», nada que ver con la r española.",
+      "吗 al final convierte una afirmación en pregunta de sí/no: 你好 → 你好吗？ El orden no se toca.",
+      "呢 rebota la pregunta sin repetirla: 我很好，你呢？ = «estoy muy bien, ¿y vos?».",
+      "很 acompaña al adjetivo: se dice 我很好, no 我好 pelado.",
+      "也 (también) va después del sujeto y antes del adjetivo: 我也很好. Nunca 也我很好 ni 我很好也.",
+      "⚠️ La clave del ejercicio de sustitución: en chino el verbo NO se conjuga. Cambiás el pronombre y 好吗？/ 很好 / 呢？ quedan igual.",
+      "不 (bù) niega: va entre el sujeto y el adjetivo — 我不好 = no estoy bien.",
+      "⚠️ Al negar, el 很 se cae: 我很好 → 我不好. 我不很好 no se dice.",
+      "El 吗 no vuelve en la respuesta: 你好吗？ se contesta 我很好 o 我不好, sin 吗.",
+      "Dato de pronunciación (no salió en clase): 不 es 4to tono (bù), pero delante de otro 4to tono se dice bú — 不是 bú shì."
+    ],
+    resources: [
+      {
+        label: "数字歌 — Number Song (Little Fox)",
+        url: "https://www.youtube.com/watch?v=NcLNmRgCpAE",
+        note: "Canción de los números para fijar 一 … 十 de oído."
+      }
     ]
   }
 ];
