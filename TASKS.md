@@ -7,6 +7,19 @@
 ## Doing
 
 ## Done
+- [x] [chino-app] Rutas por clase (/clase/04) y URL propia para cada ejercicio
+- [x] [chino-app] Home como índice de clases + navegación anterior/siguiente
+- [x] [chino-app] Negación con 不 (我不好): set del drill, material, quiz y trazos
+- [x] [chino-app] Drill de sustitución de pronombres sobre el diálogo 你好吗 (tab Oraciones)
+- [x] [chino-app] Clase 4: diálogo del libro + 吗/呢/很/也 en material, quiz (10→14) y trazos
+- [x] [chino-app] `npm run check` valida también los datos de clases (quizzes y drill)
+- [x] [chino-app] Quiz: mezclar preguntas y opciones en cada ronda (antes se aprendía la posición)
+- [x] [chino-app] Quiz: repasar solo las preguntas falladas al terminar
+- [x] [chino-app] Quiz: modo mixto (todas las clases) y modo repaso con Leitner
+- [x] [chino-app] Entrenador de números: dictado (escuchás → escribís la cifra) y armado con caracteres
+- [x] [chino-app] `npm run check`: verificación de la lógica pura sin framework de tests
+- [x] [chino-app] Clase 4: números 0–10 y composición hasta 99 (material + quiz de 10 + set de trazos)
+- [x] [chino-app] Sección "Material de la clase" en apuntes para links (videos, canciones)
 - [x] [chino-app] Rehacer ejercicio de tonos: trazar el contorno en vez de multiple choice
 - [x] [chino-app] Ejercicio de colocación de la marca de tono (sobre qué vocal va + qué tono)
 - [x] [chino-app] Ejercicio de escuchar y marcar el tono (根据录音标出声调) con audio sintetizado
@@ -23,5 +36,6 @@
 - [x] [chino-app] Importador de cuestionarios JSON
 
 ## Future / ideas
+- [ ] [chino-app] Borrar `src/components/Navbar.tsx` (código muerto, nadie lo importa)
 - [ ] Modo flashcards con trazo de caracteres Hanzi
 - [ ] Reconocimiento de voz para practicar pronunciación
