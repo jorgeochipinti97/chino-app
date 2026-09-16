@@ -3,12 +3,16 @@
 import React from "react";
 import { StudentScore } from "@/types";
 import { Trophy, Sparkles, Clock, Target, Flame } from "lucide-react";
+import { useUser } from "@/lib/user-context";
 
 interface LeaderboardViewProps {
-  currentUser: StudentScore;
+  /** Se puede pasar explícito; si no, sale del contexto del alumno. */
+  currentUser?: StudentScore;
 }
 
-export const LeaderboardView: React.FC<LeaderboardViewProps> = ({ currentUser }) => {
+export const LeaderboardView: React.FC<LeaderboardViewProps> = ({ currentUser: fromProps }) => {
+  const { user } = useUser();
+  const currentUser = fromProps ?? user;
   return (
     <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
       {/* Header */}

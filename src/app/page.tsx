@@ -1,132 +1,109 @@
-"use client";
+import Link from "next/link";
+import { LESSON_MATERIALS, INITIAL_QUIZZES } from "@/data/lessons";
+import { STROKE_SETS } from "@/data/strokes";
+import { SUBSTITUTION_SETS } from "@/data/sentences";
+import { lessonHref } from "@/lib/routes";
+import { CheckSquare, Brush, Ear, Hash, MessageSquare, ArrowRight } from "lucide-react";
 
-import React, { useState, useEffect } from "react";
-import { Sidebar } from "@/components/Sidebar";
-import { QuizView } from "@/components/QuizView";
-import { SurveyView } from "@/components/SurveyView";
-import { LeaderboardView } from "@/components/LeaderboardView";
-import { LessonNotesView } from "@/components/LessonNotesView";
-import { StrokeGameView } from "@/components/StrokeGameView";
-import { ToneTrainerView } from "@/components/ToneTrainerView";
-import { INITIAL_QUIZZES } from "@/data/lessons";
-import {
-  getStoredQuizzes,
-  getCurrentUser,
-  setCurrentUser,
-  updateStudentQuizScore,
-} from "@/lib/storage";
-import { QuizData, StudentScore } from "@/types";
-import { PanelLeftOpen, Menu } from "lucide-react";
+const TOOLS = [
+  { href: "/practicar", label: "Quizzes", hint: "Por clase, mixto o repaso", icon: CheckSquare, accent: "text-emerald-500" },
+  { href: "/trazos", label: "Trazos", hint: "Escribir los caracteres", icon: Brush, accent: "text-rose-500" },
+  { href: "/tonos", label: "Tonos", hint: "Marcar la vocal", icon: Ear, accent: "text-violet-500" },
+  { href: "/numeros", label: "Números", hint: "Dictado y armado", icon: Hash, accent: "text-sky-500" },
+  { href: "/oraciones", label: "Oraciones", hint: "Cambiar el pronombre", icon: MessageSquare, accent: "text-orange-500" },
+];
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"quizzes" | "surveys" | "leaderboard" | "notes" | "strokes" | "tones">("notes");
-  const [selectedLesson, setSelectedLesson] = useState<number>(2);
-  const [quizzes, setQuizzes] = useState<QuizData[]>(INITIAL_QUIZZES);
-  // En celular el sidebar es un drawer: arranca CERRADO o te tapa la app al entrar.
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
-  const [currentUser, setCurrentUserState] = useState<StudentScore>({
-    id: "std-local",
-    name: "Jorge",
-    avatar: "👨‍💻",
-    total_points: 0,
-    quizzes_completed: 0,
-    accuracy: 100,
-    streak_days: 1,
-    last_active: "Ahora",
-  });
-
-  useEffect(() => {
-    setQuizzes(getStoredQuizzes());
-    setCurrentUserState(getCurrentUser());
-    setIsSidebarOpen(window.matchMedia("(min-width: 768px)").matches);
-  }, []);
-
-  const handleFinishQuiz = (correctCount: number, totalCount: number, timeBonus: number) => {
-    const updated = updateStudentQuizScore(currentUser.name, correctCount, totalCount, timeBonus);
-    const me = updated.find((s) => s.name.toLowerCase() === currentUser.name.toLowerCase()) || {
-      ...currentUser,
-      total_points: currentUser.total_points + correctCount * 100 + timeBonus,
-      quizzes_completed: currentUser.quizzes_completed + 1,
-    };
-    setCurrentUserState(me);
-  };
-
-  const handleUpdateName = (newName: string) => {
-    const updated: StudentScore = { ...currentUser, name: newName };
-    setCurrentUser(updated);
-    setCurrentUserState(updated);
-  };
+  const lessons = [...LESSON_MATERIALS].sort((a, b) => b.lesson_number - a.lesson_number);
 
   return (
-    <div className="min-h-[100dvh] flex flex-col md:flex-row bg-background text-foreground transition-colors duration-200 selection:bg-emerald-500/20 selection:text-emerald-700">
-      <Sidebar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        selectedLesson={selectedLesson}
-        setSelectedLesson={setSelectedLesson}
-        currentUser={currentUser}
-        onUpdateName={handleUpdateName}
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-      />
+    <div className="max-w-4xl mx-auto space-y-8">
+      <header className="space-y-2">
+        <span className="px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-600 dark:text-teal-400 font-bold text-[11px] tracking-wide uppercase">
+          Curso de chino
+        </span>
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground font-mono">
+          Clases
+        </h1>
+        <p className="text-xs sm:text-sm text-text-secondary">
+          Cada clase tiene su apunte, su quiz y sus ejercicios en una sola página.
+        </p>
+      </header>
 
-      <div className="flex-1 min-w-0 flex flex-col h-[100dvh] overflow-y-auto overflow-x-hidden">
-        {/* Top Control Bar when Sidebar is Closed on Desktop */}
-        {!isSidebarOpen && (
-          <div className="sticky top-0 z-30 px-4 py-2 pt-[max(0.5rem,env(safe-area-inset-top))] bg-background/80 apple-blur border-b border-border flex items-center justify-between animate-apple-in">
-            <button
-              onClick={() => setIsSidebarOpen(true)}
-              className="flex items-center gap-2 px-3 min-h-11 rounded-xl border border-border bg-bg-card hover:bg-bg-secondary text-xs font-mono font-bold text-foreground transition-all shadow-sm active:scale-95"
-              title="Mostrar barra lateral"
+      {/* Índice de clases, la más nueva primero */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {lessons.map((lesson) => {
+          const quiz = INITIAL_QUIZZES.find((q) => q.lesson_number === lesson.lesson_number);
+          const chars = STROKE_SETS.filter((s) => s.lesson_number === lesson.lesson_number).reduce(
+            (acc, s) => acc + s.characters.length,
+            0
+          );
+          const drills = SUBSTITUTION_SETS.filter(
+            (s) => s.lesson_number === lesson.lesson_number
+          ).reduce((acc, s) => acc + s.items.length, 0);
+
+          return (
+            <Link
+              key={lesson.id}
+              href={lessonHref(lesson.lesson_number)}
+              className="group p-4 rounded-2xl border border-border bg-bg-card hover:border-teal-500/40 hover:bg-bg-secondary transition-all active:scale-[0.99] flex flex-col gap-2"
             >
-              <Menu className="w-4 h-4 text-emerald-500 md:hidden" />
-              <PanelLeftOpen className="w-4 h-4 text-emerald-500 hidden md:block" />
-              <span className="hidden sm:inline">Barra lateral</span>
-              <span className="sm:hidden">Menú</span>
-            </button>
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-mono text-[11px] font-bold text-teal-500">
+                  Clase 0{lesson.lesson_number}
+                </span>
+                <ArrowRight className="w-4 h-4 text-text-muted group-hover:text-teal-500 transition-colors" />
+              </div>
 
-            <div className="flex items-center gap-2 text-xs font-mono text-text-muted">
-              <span className="font-chinese font-bold text-emerald-500 text-sm">汉</span>
-              <span>Chino App</span>
-            </div>
-          </div>
-        )}
+              <h2 className="text-sm font-bold text-foreground leading-snug">
+                {lesson.title.replace(/^Clase\s*\d+\s*:\s*/i, "")}
+              </h2>
 
-        <main className="flex-1 min-w-0 px-3 py-4 sm:px-6 sm:py-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
-          {activeTab === "notes" && (
-            <LessonNotesView
-              selectedLesson={selectedLesson}
-              setSelectedLesson={setSelectedLesson}
-            />
-          )}
+              <p className="text-[11px] text-text-muted leading-relaxed">{lesson.summary}</p>
 
-          {activeTab === "quizzes" && (
-            <QuizView
-              quizzes={quizzes}
-              currentUser={currentUser}
-              onFinishQuiz={handleFinishQuiz}
-            />
-          )}
-
-          {activeTab === "strokes" && (
-            <StrokeGameView />
-          )}
-
-          {activeTab === "tones" && (
-            <ToneTrainerView />
-          )}
-
-          {activeTab === "surveys" && (
-            <SurveyView />
-          )}
-
-          {activeTab === "leaderboard" && (
-            <LeaderboardView
-              currentUser={currentUser}
-            />
-          )}
-        </main>
+              <div className="flex flex-wrap gap-1.5 pt-1 mt-auto">
+                {quiz && (
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                    {quiz.questions.length} preguntas
+                  </span>
+                )}
+                {chars > 0 && (
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-500">
+                    {chars} caracteres
+                  </span>
+                )}
+                {drills > 0 && (
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-500">
+                    {drills} oraciones
+                  </span>
+                )}
+              </div>
+            </Link>
+          );
+        })}
       </div>
+
+      {/* Ejercicios sueltos, con todo el curso mezclado */}
+      <section className="space-y-3">
+        <h2 className="text-xs font-mono font-bold text-text-muted uppercase tracking-wider">
+          Practicar todo junto
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {TOOLS.map(({ href, label, hint, icon: Icon, accent }) => (
+            <Link
+              key={href}
+              href={href}
+              className="flex items-center gap-3 p-3 min-h-11 rounded-xl border border-border bg-bg-card hover:bg-bg-secondary transition-all active:scale-[0.99]"
+            >
+              <Icon className={`w-4 h-4 shrink-0 ${accent}`} />
+              <div className="min-w-0">
+                <span className="block text-xs font-bold text-foreground">{label}</span>
+                <span className="block text-[11px] text-text-muted">{hint}</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

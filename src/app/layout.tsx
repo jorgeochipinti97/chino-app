@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { AppShell } from "@/components/AppShell";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://chino-app.vercel.app"),
@@ -55,7 +56,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="min-h-screen antialiased bg-background text-foreground transition-colors duration-200">
-        {children}
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

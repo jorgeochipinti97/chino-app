@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   CheckSquare,
   BookOpen,
@@ -10,45 +12,136 @@ import {
   Sun,
   Pencil,
   Check,
-  Menu,
-  X,
   PanelLeftClose,
-  ChevronRight,
-  GraduationCap,
   Brush,
   Ear,
+  Hash,
+  MessageSquare,
+  LucideIcon,
 } from "lucide-react";
-import { StudentScore } from "@/types";
 import { LESSON_MATERIALS, INITIAL_QUIZZES } from "@/data/lessons";
+import { useUser } from "@/lib/user-context";
+import { lessonHref } from "@/lib/routes";
+
+interface NavItem {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+  badge: string;
+  /** Tailwind no arma clases por concatenación, así que cada color va escrito entero. */
+  activeBg: string;
+  idleIcon: string;
+  activeBadge: string;
+  idleBadge: string;
+  chineseBadge?: boolean;
+}
+
+const PRACTICE_NAV: NavItem[] = [
+  {
+    href: "/",
+    label: "Documentación",
+    icon: BookOpen,
+    badge: "Clases",
+    activeBg: "bg-teal-500 text-white shadow-apple-glow",
+    idleIcon: "text-teal-500",
+    activeBadge: "bg-white/20 text-white",
+    idleBadge: "bg-teal-500/15 text-teal-500",
+  },
+  {
+    href: "/practicar",
+    label: "Quizzes",
+    icon: CheckSquare,
+    badge: `${INITIAL_QUIZZES.reduce((acc, q) => acc + q.questions.length, 0)} preg.`,
+    activeBg: "bg-emerald-500 text-white shadow-apple-glow",
+    idleIcon: "text-emerald-500",
+    activeBadge: "bg-white/20 text-white",
+    idleBadge: "bg-emerald-500/15 text-emerald-500",
+  },
+  {
+    href: "/trazos",
+    label: "Trazos",
+    icon: Brush,
+    badge: "笔顺",
+    chineseBadge: true,
+    activeBg: "bg-rose-500 text-white shadow-apple-glow",
+    idleIcon: "text-rose-500",
+    activeBadge: "bg-white/20 text-white",
+    idleBadge: "bg-rose-500/15 text-rose-500",
+  },
+  {
+    href: "/tonos",
+    label: "Tonos",
+    icon: Ear,
+    badge: "声调",
+    chineseBadge: true,
+    activeBg: "bg-violet-500 text-white shadow-apple-glow",
+    idleIcon: "text-violet-500",
+    activeBadge: "bg-white/20 text-white",
+    idleBadge: "bg-violet-500/15 text-violet-500",
+  },
+  {
+    href: "/numeros",
+    label: "Números",
+    icon: Hash,
+    badge: "数字",
+    chineseBadge: true,
+    activeBg: "bg-sky-500 text-white shadow-apple-glow",
+    idleIcon: "text-sky-500",
+    activeBadge: "bg-white/20 text-white",
+    idleBadge: "bg-sky-500/15 text-sky-500",
+  },
+  {
+    href: "/oraciones",
+    label: "Oraciones",
+    icon: MessageSquare,
+    badge: "句子",
+    chineseBadge: true,
+    activeBg: "bg-orange-500 text-white shadow-apple-glow",
+    idleIcon: "text-orange-500",
+    activeBadge: "bg-white/20 text-white",
+    idleBadge: "bg-orange-500/15 text-orange-500",
+  },
+];
+
+const COMMUNITY_NAV: NavItem[] = [
+  {
+    href: "/encuestas",
+    label: "Encuestas",
+    icon: BarChart3,
+    badge: "Próx.",
+    activeBg: "bg-blue-500 text-white shadow-apple-glow",
+    idleIcon: "text-blue-500",
+    activeBadge: "bg-white/20 text-white",
+    idleBadge: "bg-blue-500/10 text-blue-500",
+  },
+  {
+    href: "/ranking",
+    label: "Ranking",
+    icon: Trophy,
+    badge: "Próx.",
+    activeBg: "bg-amber-500 text-white shadow-apple-glow",
+    idleIcon: "text-amber-500",
+    activeBadge: "bg-white/20 text-white",
+    idleBadge: "bg-amber-500/10 text-amber-500",
+  },
+];
 
 interface SidebarProps {
-  activeTab: "quizzes" | "surveys" | "leaderboard" | "notes" | "strokes" | "tones";
-  setActiveTab: (tab: "quizzes" | "surveys" | "leaderboard" | "notes" | "strokes" | "tones") => void;
-  selectedLesson: number;
-  setSelectedLesson: (lessonNum: number) => void;
-  currentUser: StudentScore;
-  onUpdateName: (newName: string) => void;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({
-  activeTab,
-  setActiveTab,
-  selectedLesson,
-  setSelectedLesson,
-  currentUser,
-  onUpdateName,
-  isOpen,
-  onClose,
-}) => {
+export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+  const pathname = usePathname();
+  const { user, updateName } = useUser();
+
   const [isDark, setIsDark] = useState<boolean>(false);
   const [isEditingName, setIsEditingName] = useState<boolean>(false);
-  const [tempName, setTempName] = useState<string>(currentUser.name);
+  const [tempName, setTempName] = useState<string>(user.name);
 
   useEffect(() => {
-    setTempName(currentUser.name);
-  }, [currentUser.name]);
+    setTempName(user.name);
+  }, [user.name]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -74,9 +167,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const handleSaveName = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (tempName.trim()) {
-      onUpdateName(tempName.trim());
-    }
+    if (tempName.trim()) updateName(tempName.trim());
     setIsEditingName(false);
   };
 
@@ -87,16 +178,36 @@ export const Sidebar: React.FC<SidebarProps> = ({
     }
   };
 
-  const handleSelectTab = (tab: SidebarProps["activeTab"]) => {
-    setActiveTab(tab);
-    closeIfMobile();
-  };
+  /** Las clases cuelgan de Documentación: estando en /clase/04 se marca esa sección. */
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" || pathname.startsWith("/clase") : pathname === href;
 
-  const handleSelectLesson = (lessonNum: number) => {
-    setSelectedLesson(lessonNum);
-    setActiveTab("notes");
-    closeIfMobile();
-  };
+  const renderNav = (items: NavItem[]) =>
+    items.map(({ href, label, icon: Icon, badge, ...style }) => {
+      const active = isActive(href);
+      return (
+        <Link
+          key={href}
+          href={href}
+          onClick={closeIfMobile}
+          className={`w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
+            active ? style.activeBg : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
+          }`}
+        >
+          <div className="flex items-center gap-2.5">
+            <Icon className={`w-4 h-4 shrink-0 ${active ? "text-white" : style.idleIcon}`} />
+            <span>{label}</span>
+          </div>
+          <span
+            className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+              style.chineseBadge ? "font-chinese" : "font-mono"
+            } ${active ? style.activeBadge : style.idleBadge}`}
+          >
+            {badge}
+          </span>
+        </Link>
+      );
+    });
 
   return (
     <>
@@ -121,19 +232,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="p-4 pt-[max(1rem,env(safe-area-inset-top))] space-y-5 overflow-y-auto flex-1 overscroll-contain">
             {/* Header */}
             <div className="flex items-center justify-between pb-1">
-              <div className="flex items-center gap-2.5 min-w-0">
+              <Link
+                href="/"
+                onClick={closeIfMobile}
+                className="flex items-center gap-2.5 min-w-0 group"
+              >
                 <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white font-chinese font-bold shadow-apple-glow text-base shrink-0">
                   汉
                 </div>
                 <div className="min-w-0">
-                  <span className="font-extrabold tracking-tight text-foreground text-sm block leading-tight truncate">
+                  <span className="font-extrabold tracking-tight text-foreground text-sm block leading-tight truncate group-hover:text-emerald-500 transition-colors">
                     Chino App
                   </span>
                   <span className="text-[11px] text-text-muted font-medium block">
                     Documentación & Práctica
                   </span>
                 </div>
-              </div>
+              </Link>
 
               {/* Close Sidebar Button */}
               <button
@@ -145,197 +260,59 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </button>
             </div>
 
-            {/* Navigation Structure */}
             <nav className="space-y-4">
-              {/* Primary Navigation Tabs */}
-              <div className="space-y-1">
-                <button
-                  onClick={() => handleSelectTab("notes")}
-                  className={`w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
-                    activeTab === "notes"
-                      ? "bg-teal-500 text-white shadow-apple-glow"
-                      : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <BookOpen
-                      className={`w-4 h-4 shrink-0 ${
-                        activeTab === "notes" ? "text-white" : "text-teal-500"
-                      }`}
-                    />
-                    <span>Documentación</span>
-                  </div>
-                  <span
-                    className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
-                      activeTab === "notes" ? "bg-white/20 text-white" : "bg-teal-500/15 text-teal-500"
-                    }`}
-                  >
-                    Clases
-                  </span>
-                </button>
+              <div className="space-y-1">{renderNav(PRACTICE_NAV)}</div>
 
-                <button
-                  onClick={() => handleSelectTab("quizzes")}
-                  className={`w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
-                    activeTab === "quizzes"
-                      ? "bg-emerald-500 text-white shadow-apple-glow"
-                      : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <CheckSquare
-                      className={`w-4 h-4 shrink-0 ${
-                        activeTab === "quizzes" ? "text-white" : "text-emerald-500"
-                      }`}
-                    />
-                    <span>Quizzes</span>
-                  </div>
-                  <span
-                    className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
-                      activeTab === "quizzes"
-                        ? "bg-white/20 text-white"
-                        : "bg-emerald-500/15 text-emerald-500"
-                    }`}
-                  >
-                    {INITIAL_QUIZZES.reduce((acc, q) => acc + q.questions.length, 0)} preg.
-                  </span>
-                </button>
-                <button
-                  onClick={() => handleSelectTab("strokes")}
-                  className={`w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
-                    activeTab === "strokes"
-                      ? "bg-rose-500 text-white shadow-apple-glow"
-                      : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Brush
-                      className={`w-4 h-4 shrink-0 ${
-                        activeTab === "strokes" ? "text-white" : "text-rose-500"
-                      }`}
-                    />
-                    <span>Trazos</span>
-                  </div>
-                  <span
-                    className={`text-[10px] font-chinese px-1.5 py-0.2 rounded-full ${
-                      activeTab === "strokes" ? "bg-white/20 text-white" : "bg-rose-500/15 text-rose-500"
-                    }`}
-                  >
-                    笔顺
-                  </span>
-                </button>
-
-                <button
-                  onClick={() => handleSelectTab("tones")}
-                  className={`w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
-                    activeTab === "tones"
-                      ? "bg-violet-500 text-white shadow-apple-glow"
-                      : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Ear
-                      className={`w-4 h-4 shrink-0 ${
-                        activeTab === "tones" ? "text-white" : "text-violet-500"
-                      }`}
-                    />
-                    <span>Tonos</span>
-                  </div>
-                  <span
-                    className={`text-[10px] font-chinese px-1.5 py-0.2 rounded-full ${
-                      activeTab === "tones" ? "bg-white/20 text-white" : "bg-violet-500/15 text-violet-500"
-                    }`}
-                  >
-                    声调
-                  </span>
-                </button>
-              </div>
-
-              {/* Class Sub-Tree (when in Documentación) */}
+              {/* Índice de clases */}
               <div className="space-y-1 pt-2 border-t border-border">
                 <span className="px-3 text-[10px] font-mono font-bold text-text-muted uppercase tracking-wider block">
                   Índice de Clases
                 </span>
                 <div className="space-y-0.5 md:max-h-52 md:overflow-y-auto pr-1">
                   {LESSON_MATERIALS.map((lesson) => {
-                    const isSelected = activeTab === "notes" && selectedLesson === lesson.lesson_number;
+                    const href = lessonHref(lesson.lesson_number);
+                    const selected = pathname === href;
 
                     return (
-                      <button
+                      <Link
                         key={lesson.id}
-                        onClick={() => handleSelectLesson(lesson.lesson_number)}
+                        href={href}
+                        onClick={closeIfMobile}
                         className={`w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl text-xs font-mono transition-all duration-200 cursor-pointer text-left active:scale-[0.98] ${
-                          isSelected
+                          selected
                             ? "bg-teal-500/15 text-teal-600 dark:text-teal-400 font-bold border border-teal-500/30"
                             : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
                         }`}
                       >
                         <div className="flex items-center gap-2 min-w-0">
-                          <span className="text-[11px] text-text-muted">0{lesson.lesson_number}</span>
-                          <span className="truncate">{lesson.title.replace(/^Clase\s*\d+\s*:\s*/i, "")}</span>
+                          <span className="text-[11px] text-text-muted">
+                            0{lesson.lesson_number}
+                          </span>
+                          <span className="truncate">
+                            {lesson.title.replace(/^Clase\s*\d+\s*:\s*/i, "")}
+                          </span>
                         </div>
-                        {isSelected && (
+                        {selected && (
                           <span className="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0"></span>
                         )}
-                      </button>
+                      </Link>
                     );
                   })}
                 </div>
               </div>
 
-              {/* Community Section */}
+              {/* Comunidad */}
               <div className="space-y-1 pt-2 border-t border-border">
                 <span className="px-3 text-[10px] font-mono font-bold text-text-muted uppercase tracking-wider block">
                   Comunidad
                 </span>
-                <button
-                  onClick={() => handleSelectTab("surveys")}
-                  className={`w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
-                    activeTab === "surveys"
-                      ? "bg-blue-500 text-white shadow-apple-glow"
-                      : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <BarChart3
-                      className={`w-4 h-4 shrink-0 ${
-                        activeTab === "surveys" ? "text-white" : "text-blue-500"
-                      }`}
-                    />
-                    <span>Encuestas</span>
-                  </div>
-                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-blue-500/10 text-blue-500 uppercase">
-                    Próx.
-                  </span>
-                </button>
-
-                <button
-                  onClick={() => handleSelectTab("leaderboard")}
-                  className={`w-full flex items-center justify-between px-3 min-h-11 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
-                    activeTab === "leaderboard"
-                      ? "bg-amber-500 text-white shadow-apple-glow"
-                      : "text-text-secondary hover:bg-bg-secondary hover:text-foreground"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Trophy
-                      className={`w-4 h-4 shrink-0 ${
-                        activeTab === "leaderboard" ? "text-white" : "text-amber-500"
-                      }`}
-                    />
-                    <span>Ranking</span>
-                  </div>
-                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-amber-500/10 text-amber-500 uppercase">
-                    Próx.
-                  </span>
-                </button>
+                {renderNav(COMMUNITY_NAV)}
               </div>
             </nav>
           </div>
 
           {/* Bottom Profile & Theme */}
           <div className="p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] space-y-2.5 border-t border-border shrink-0">
-            {/* User Profile Card */}
             <div className="p-2.5 rounded-xl bg-bg-secondary border border-border">
               <div className="flex items-center justify-between gap-2">
                 {!isEditingName ? (
@@ -344,10 +321,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     className="flex items-center gap-2 cursor-pointer flex-1 min-w-0 group"
                     title="Click para cambiar tu nombre"
                   >
-                    <span className="text-lg">{currentUser.avatar}</span>
+                    <span className="text-lg">{user.avatar}</span>
                     <div className="truncate min-w-0">
                       <span className="text-xs font-bold text-foreground block truncate group-hover:text-emerald-500 transition-colors">
-                        {currentUser.name}
+                        {user.name}
                       </span>
                       <span className="text-[10px] text-text-muted block">Estudiante</span>
                     </div>

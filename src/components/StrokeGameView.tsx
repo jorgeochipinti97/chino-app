@@ -31,7 +31,12 @@ const paintColor = (done: number, total: number) => {
   return PAINT_RAMP[Math.min(idx, PAINT_RAMP.length - 1)];
 };
 
-export const StrokeGameView: React.FC = () => {
+interface StrokeGameViewProps {
+  /** Cuando viene, solo se practican los sets de esa clase. */
+  lessonNumber?: number;
+}
+
+export const StrokeGameView: React.FC<StrokeGameViewProps> = ({ lessonNumber }) => {
   const targetRef = useRef<HTMLDivElement>(null);
   const writerRef = useRef<HanziWriterType | null>(null);
 
@@ -43,7 +48,11 @@ export const StrokeGameView: React.FC = () => {
   const [isComplete, setIsComplete] = useState<boolean>(false);
   const [mastered, setMastered] = useState<string[]>([]);
 
-  const activeSet = STROKE_SETS[setIdx];
+  const sets =
+    lessonNumber === undefined
+      ? STROKE_SETS
+      : STROKE_SETS.filter((set) => set.lesson_number === lessonNumber);
+  const activeSet = sets[setIdx] || sets[0];
   const activeChar = activeSet.characters[charIdx];
 
   useEffect(() => {
@@ -209,7 +218,7 @@ export const StrokeGameView: React.FC = () => {
 
       {/* Selector de set */}
       <div className="flex gap-2 overflow-x-auto pb-1 -mx-2 px-2 snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {STROKE_SETS.map((set, idx) => (
+        {sets.map((set, idx) => (
           <button
             key={set.id}
             onClick={() => handleSelectSet(idx)}
