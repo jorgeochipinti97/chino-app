@@ -7,6 +7,8 @@
 ## Doing
 
 ## Done
+- [x] [chino-app] Clase 5: pronombres con 您/它们, 哪国人, orden S+V+O, familia HSK 1 y saludos (material, quiz de 15, 2 sets de trazos, 2 sets de oraciones)
+- [x] [chino-app] Corregir la regla falsa «它 no lleva 们» en clase 3 y 4 (它们 existe)
 - [x] [chino-app] Rutas por clase (/clase/04) y URL propia para cada ejercicio
 - [x] [chino-app] Home como índice de clases + navegación anterior/siguiente
 - [x] [chino-app] Negación con 不 (我不好): set del drill, material, quiz y trazos

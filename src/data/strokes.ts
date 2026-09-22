@@ -4,6 +4,41 @@ import { StrokeSet } from "@/types";
 // Al agregar caracteres nuevos, correr: node scripts/copy-hanzi-data.mjs
 export const STROKE_SETS: StrokeSet[] = [
   {
+    id: "strokes-clase-05-familia",
+    lesson_number: 5,
+    title: "La familia",
+    description: "Los familiares del HSK 1. Fijate el radical: 女 a la izquierda en 妈, 姐, 妹 y 奶 (mujeres), 父 arriba en 爸 y 爷.",
+    characters: [
+      { hanzi: "爸", pinyin: "bà", meaning: "Papá (爸爸)" },
+      { hanzi: "妈", pinyin: "mā", meaning: "Mamá (妈妈)" },
+      { hanzi: "哥", pinyin: "gē", meaning: "Hermano mayor (哥哥)" },
+      { hanzi: "弟", pinyin: "dì", meaning: "Hermano menor (弟弟)" },
+      { hanzi: "姐", pinyin: "jiě", meaning: "Hermana mayor (姐姐)" },
+      { hanzi: "妹", pinyin: "mèi", meaning: "Hermana menor (妹妹)" },
+      { hanzi: "儿", pinyin: "ér", meaning: "Hijo (儿子) · hija (女儿)" },
+      { hanzi: "子", pinyin: "zi", meaning: "Hijo (儿子)" },
+      { hanzi: "女", pinyin: "nǚ", meaning: "Mujer (女儿 = hija)" },
+      { hanzi: "爷", pinyin: "yé", meaning: "Abuelo paterno (爷爷)" },
+      { hanzi: "奶", pinyin: "nǎi", meaning: "Abuela paterna (奶奶)" },
+    ],
+  },
+  {
+    id: "strokes-clase-05-oraciones",
+    lesson_number: 5,
+    title: "País, comida y saludos",
+    description: "Los caracteres de 你是哪国人？/ 他是中国人, de 我吃苹果 y de los saludos útiles.",
+    characters: [
+      { hanzi: "中", pinyin: "zhōng", meaning: "Centro (中国 = China)" },
+      { hanzi: "国", pinyin: "guó", meaning: "País (哪国人 = de qué país)" },
+      { hanzi: "吃", pinyin: "chī", meaning: "Comer (我吃苹果)" },
+      { hanzi: "苹", pinyin: "píng", meaning: "Manzana (苹果)" },
+      { hanzi: "果", pinyin: "guǒ", meaning: "Fruta (苹果)" },
+      { hanzi: "欢", pinyin: "huān", meaning: "Alegre (欢迎 = bienvenido)" },
+      { hanzi: "迎", pinyin: "yíng", meaning: "Recibir (欢迎 = bienvenido)" },
+      { hanzi: "谢", pinyin: "xiè", meaning: "Agradecer (谢谢 = gracias)" },
+    ],
+  },
+  {
     id: "strokes-clase-04-numeros",
     lesson_number: 4,
     title: "Los números 0–10",
