@@ -173,17 +173,17 @@ export const INITIAL_QUIZZES: QuizData[] = [
       },
       {
         id: 2,
-        question: "PREGUNTA DE EXAMEN: ¿a qué pronombre NO se le puede agregar el sufijo 们?",
+        question: "¿Cómo se dice «ellos / ellas» cuando son animales o cosas?",
         options: [
-          "我 (wǒ)",
-          "你 (nǐ)",
-          "它 (tā — eso)",
-          "他 (tā — él)"
+          "它们 (tāmen)",
+          "他们 (tāmen)",
+          "她们 (tāmen)",
+          "我们 (wǒmen)"
         ],
-        correct_answer: "它 (tā — eso)",
-        explanation: "它 se refiere a cosas y animales, y 们 pluraliza PERSONAS. Por eso 它们 no se usa: no existe 'esos' con 们.",
-        hanzi: "它",
-        pinyin: "tā"
+        correct_answer: "它们 (tāmen)",
+        explanation: "它 (cosa o animal) también se pluraliza con 们: 它们. Los tres plurales 他们 / 她们 / 它们 suenan igual (tāmen); cambia solo el caracter.",
+        hanzi: "它们",
+        pinyin: "tāmen"
       },
       {
         id: 3,
@@ -531,6 +531,225 @@ export const INITIAL_QUIZZES: QuizData[] = [
         pinyin: "Wǒ bù hǎo"
       }
     ]
+  },
+  {
+    id: "clase-05",
+    lesson_number: 5,
+    title: "Quiz - Clase 5 de Chino",
+    description: "Pronombres con 您 y el plural 它们, ¿de qué país sos? (哪国人), el orden sujeto + verbo + objeto (我吃苹果), la familia del HSK 1 y saludos útiles.",
+    total_questions: 15,
+    questions: [
+      {
+        id: 1,
+        question: "¿Cuál es el «usted» formal?",
+        options: [
+          "您 (nín)",
+          "你 (nǐ)",
+          "你们 (nǐmen)",
+          "他 (tā)"
+        ],
+        correct_answer: "您 (nín)",
+        explanation: "您 es el 你 de respeto: el mismo caracter con 心 (corazón) debajo. Se usa con profesores y personas mayores.",
+        hanzi: "您",
+        pinyin: "nín"
+      },
+      {
+        id: 2,
+        question: "¿En qué se diferencian 他们, 她们 y 它们?",
+        options: [
+          "Solo en el caracter: los tres suenan tāmen",
+          "En el tono de la primera sílaba",
+          "En el orden: 们 va adelante en 它们",
+          "它们 no existe"
+        ],
+        correct_answer: "Solo en el caracter: los tres suenan tāmen",
+        explanation: "他们 = ellos (o grupo mixto), 她们 = ellas, 它们 = ellos/ellas para animales o cosas. Al oído son idénticos.",
+        hanzi: "它们",
+        pinyin: "tāmen"
+      },
+      {
+        id: 3,
+        question: "¿Cómo preguntás «¿De qué país sos?»",
+        options: [
+          "你是哪国人？",
+          "你叫哪国人？",
+          "你住哪国人？",
+          "哪国人是你？"
+        ],
+        correct_answer: "你是哪国人？",
+        explanation: "Literal: «¿Vos sos persona de qué país?». 哪 (cuál) + 国 (país) + 人 (persona), con el verbo 是 (ser).",
+        hanzi: "你是哪国人？",
+        pinyin: "Nǐ shì nǎ guó rén?"
+      },
+      {
+        id: 4,
+        question: "¿Qué significa 他是中国人？",
+        options: [
+          "Él es chino",
+          "Él vive en China",
+          "¿De qué país es él?",
+          "Él es mi papá"
+        ],
+        correct_answer: "Él es chino",
+        explanation: "中国 (Zhōngguó) = China, + 人 (rén) = persona → 中国人, chino. 是 une el sujeto con lo que es.",
+        hanzi: "他是中国人",
+        pinyin: "Tā shì Zhōngguó rén"
+      },
+      {
+        id: 5,
+        question: "¿Qué significa 她是我妈妈？",
+        options: [
+          "Ella es mi mamá",
+          "Ella es mi hermana",
+          "Yo soy su mamá",
+          "¿Ella es tu mamá?"
+        ],
+        correct_answer: "Ella es mi mamá",
+        explanation: "她 (ella) + 是 (es) + 我妈妈 (mi mamá). Con la familia cercana el pronombre va pegado: 我妈妈.",
+        hanzi: "她是我妈妈",
+        pinyin: "Tā shì wǒ māma"
+      },
+      {
+        id: 6,
+        question: "¿Cómo se dice «Yo como manzana»?",
+        options: [
+          "我吃苹果",
+          "我苹果吃",
+          "吃苹果我",
+          "苹果吃我"
+        ],
+        correct_answer: "我吃苹果",
+        explanation: "Sujeto + verbo + objeto, como en castellano: 我 (yo) + 吃 (como) + 苹果 (manzana). 苹果吃我 sería «la manzana me come».",
+        hanzi: "我吃苹果",
+        pinyin: "Wǒ chī píngguǒ"
+      },
+      {
+        id: 7,
+        question: "En 我吃苹果, ¿cuál es el verbo?",
+        options: [
+          "吃 (chī)",
+          "我 (wǒ)",
+          "苹果 (píngguǒ)",
+          "果 (guǒ)"
+        ],
+        correct_answer: "吃 (chī)",
+        explanation: "吃 (chī) = comer. Va en el medio, entre el sujeto 我 y el objeto 苹果, y no se conjuga: 我吃, 他吃, 我们吃.",
+        hanzi: "吃",
+        pinyin: "chī"
+      },
+      {
+        id: 8,
+        question: "¿Qué significa 哥哥 (gēge)?",
+        options: [
+          "Hermano mayor",
+          "Hermano menor",
+          "Hermana mayor",
+          "Abuelo"
+        ],
+        correct_answer: "Hermano mayor",
+        explanation: "En chino los hermanos se nombran por edad: 哥哥 mayor, 弟弟 (dìdi) menor.",
+        hanzi: "哥哥",
+        pinyin: "gēge"
+      },
+      {
+        id: 9,
+        question: "¿Cómo se dice «hermana menor»?",
+        options: [
+          "妹妹 (mèimei)",
+          "姐姐 (jiějie)",
+          "弟弟 (dìdi)",
+          "奶奶 (nǎinai)"
+        ],
+        correct_answer: "妹妹 (mèimei)",
+        explanation: "姐姐 = hermana mayor, 妹妹 = hermana menor. Las dos llevan el radical 女 (mujer) a la izquierda.",
+        hanzi: "妹妹",
+        pinyin: "mèimei"
+      },
+      {
+        id: 10,
+        question: "¿Qué significa 女儿 (nǚ'ér)?",
+        options: [
+          "Hija",
+          "Hijo",
+          "Mamá",
+          "Novia"
+        ],
+        correct_answer: "Hija",
+        explanation: "儿子 (érzi) = hijo, 女儿 (nǚ'ér) = hija. El 女 adelante marca que es mujer.",
+        hanzi: "女儿",
+        pinyin: "nǚ'ér"
+      },
+      {
+        id: 11,
+        question: "¿Quién es 爷爷 (yéye)?",
+        options: [
+          "El abuelo paterno",
+          "El papá",
+          "El tío",
+          "El hermano mayor"
+        ],
+        correct_answer: "El abuelo paterno",
+        explanation: "爷爷 (yéye) = abuelo paterno, 奶奶 (nǎinai) = abuela paterna.",
+        hanzi: "爷爷",
+        pinyin: "yéye"
+      },
+      {
+        id: 12,
+        question: "¿Cuáles son las dos formas de decir «esposo» que vimos?",
+        options: [
+          "丈夫 y 老公",
+          "妻子 y 老婆",
+          "爸爸 y 儿子",
+          "男朋友 y 哥哥"
+        ],
+        correct_answer: "丈夫 y 老公",
+        explanation: "丈夫 (zhàngfu) y 老公 (lǎogōng) = esposo. Para esposa: 妻子 (qīzi) y 老婆 (lǎopo).",
+        hanzi: "老公",
+        pinyin: "lǎogōng"
+      },
+      {
+        id: 13,
+        question: "¿Qué significa 男朋友 (nánpéngyou)?",
+        options: [
+          "Novio",
+          "Amigo",
+          "Esposo",
+          "Hijo"
+        ],
+        correct_answer: "Novio",
+        explanation: "男 (hombre) + 朋友 (amigo) = novio. Con 女 adelante: 女朋友, novia.",
+        hanzi: "男朋友",
+        pinyin: "nánpéngyou"
+      },
+      {
+        id: 14,
+        question: "¿Qué significa 欢迎你 (huānyíng nǐ)?",
+        options: [
+          "Bienvenido / Bienvenida",
+          "Hola",
+          "Gracias",
+          "Adiós"
+        ],
+        correct_answer: "Bienvenido / Bienvenida",
+        explanation: "欢迎 (huānyíng) = dar la bienvenida, + 你 = a vos. Sirve igual para hombre o mujer.",
+        hanzi: "欢迎你",
+        pinyin: "huānyíng nǐ"
+      },
+      {
+        id: 15,
+        question: "¿Qué significa 阿姨 (āyí)?",
+        options: [
+          "Tía",
+          "Abuela",
+          "Mamá",
+          "Hermana mayor"
+        ],
+        correct_answer: "Tía",
+        explanation: "阿姨 (āyí) = tía y 叔叔 (shūshu) = tío, como aparecen en la guía del HSK 1.",
+        hanzi: "阿姨",
+        pinyin: "āyí"
+      }
+    ]
   }
 ];
 
@@ -667,7 +886,7 @@ export const LESSON_MATERIALS: LessonMaterial[] = [
     id: "mat-clase-03",
     lesson_number: 3,
     title: "Clase 3: Pronombres Personales, Plural con 们 y Orden de Trazos",
-    summary: "Los 8 pronombres personales, el sufijo 们 aplicado a sustantivos de personas (老师们, 同学们, 学生们), la excepción de 它 y las 4 reglas de orden de trazos.",
+    summary: "Los pronombres personales, el sufijo 们 (también con 它: 它们) y aplicado a sustantivos de personas (老师们, 同学们, 学生们), y las 4 reglas de orden de trazos.",
     sections: [
       {
         title: "1. Pronombres Personales — Singular",
@@ -705,7 +924,7 @@ export const LESSON_MATERIALS: LessonMaterial[] = [
             pinyin: "tā",
             hanzi: "它",
             type: "3ra persona — cosas / animales",
-            pronunciation: "ta (1er tono) · NO lleva 们",
+            pronunciation: "ta (1er tono) · plural 它们",
             meaning: "Eso / Ello"
           }
         ]
@@ -741,19 +960,26 @@ export const LESSON_MATERIALS: LessonMaterial[] = [
             type: "她 + 们",
             pronunciation: "ta-men",
             meaning: "Ellas (grupo solo de mujeres)"
+          },
+          {
+            pinyin: "tāmen",
+            hanzi: "它们",
+            type: "它 + 们",
+            pronunciation: "ta-men",
+            meaning: "Ellos / Ellas (animales o cosas)"
           }
         ]
       },
       {
-        title: "3. ⚠️ Pregunta de examen: la excepción 它",
-        description: "它 (eso) NO acepta 们. El sufijo 们 pluraliza PERSONAS, no cosas ni animales.",
+        title: "3. ⚠️ Corrección: 它们 SÍ existe",
+        description: "Acá decía que a 它 no se le agrega 们. Es incorrecto: 它们 es el plural para animales y cosas (lo confirmó la slide de la clase 5).",
         items: [
           {
-            pinyin: "tā → ✗ tāmen",
-            hanzi: "它 → 它们 ✗",
-            type: "EXCEPCIÓN",
-            pronunciation: "Si te preguntan '¿al caracter de eso se le puede agregar 们?' → NO",
-            meaning: "它 no se pluraliza con 们"
+            pinyin: "tā → tāmen",
+            hanzi: "它 → 它们",
+            type: "Plural de cosas / animales",
+            pronunciation: "他们 / 她们 / 它们 suenan igual (tāmen)",
+            meaning: "Ellos / Ellas (animales o cosas)"
           }
         ]
       },
@@ -827,7 +1053,7 @@ export const LESSON_MATERIALS: LessonMaterial[] = [
       }
     ],
     grammar_tips: [
-      "⚠️ EXAMEN: a 它 (eso) NO se le agrega 们. 们 pluraliza personas — cosas y animales quedan afuera.",
+      "它 también se pluraliza: 它们 (tāmen) = ellos/ellas para animales o cosas. (Corregido: antes figuraba como que no existía.)",
       "他 / 她 / 它 se pronuncian los tres tā. La diferencia es SOLO escrita: 亻(persona), 女 (mujer), 宀 (cosa).",
       "们 va siempre DESPUÉS de la palabra: 老师们, nunca 们老师.",
       "她们 se usa cuando el grupo es solo de mujeres. Si hay al menos un hombre, se usa 他们.",
@@ -1216,11 +1442,11 @@ export const LESSON_MATERIALS: LessonMaterial[] = [
             meaning: "¿Y vos? → ¿Y ellos?"
           },
           {
-            pinyin: "tā hǎo ma",
-            hanzi: "它好吗？",
-            type: "⚠️ EXCEPCIÓN",
-            pronunciation: "它们好吗？ NO existe",
-            meaning: "Con 它 (cosa/animal) el 们 no se agrega — es la pregunta de examen de la clase 3"
+            pinyin: "tāmen hǎo ma",
+            hanzi: "它们好吗？",
+            type: "Plural de cosas / animales",
+            pronunciation: "ta-men hao ma",
+            meaning: "¿Cómo están (los animales)? — 它 también lleva 们"
           }
         ]
       },
@@ -1289,6 +1515,118 @@ export const LESSON_MATERIALS: LessonMaterial[] = [
         url: "https://www.youtube.com/watch?v=NcLNmRgCpAE",
         note: "Canción de los números para fijar 一 … 十 de oído."
       }
+    ]
+  },
+  {
+    id: "mat-clase-05",
+    lesson_number: 5,
+    title: "Clase 5: Pronombres con 您 y 它们, ¿de qué país sos?, orden S+V+O y la familia",
+    summary: "Repaso de pronombres con el formal 您 y el plural 它们, la pregunta 你是哪国人？, el orden sujeto + verbo + objeto (我吃苹果), los miembros de la familia del HSK 1 y saludos útiles.",
+    sections: [
+      {
+        title: "1. Pronombres — Singular",
+        description: "您 es el 你 de respeto. 他 / 她 / 它 suenan igual (tā).",
+        items: [
+          { pinyin: "wǒ", hanzi: "我", type: "Yo", pronunciation: "uo (3er tono)", meaning: "Yo" },
+          { pinyin: "nǐ", hanzi: "你", type: "Tú (informal)", pronunciation: "ni (3er tono)", meaning: "Tú / Vos" },
+          { pinyin: "nín", hanzi: "您", type: "Usted (formal)", pronunciation: "nin (2do tono) · 你 + 心 debajo", meaning: "Usted" },
+          { pinyin: "tā", hanzi: "他", type: "Él", pronunciation: "ta (1er tono)", meaning: "Él" },
+          { pinyin: "tā", hanzi: "她", type: "Ella", pronunciation: "ta (1er tono)", meaning: "Ella" },
+          { pinyin: "tā", hanzi: "它", type: "Eso (objetos o animales)", pronunciation: "ta (1er tono)", meaning: "Eso / Ello" }
+        ]
+      },
+      {
+        title: "2. Pronombres — Plural con 们 (men)",
+        description: "们 va después del pronombre. Con 它 también: 它们.",
+        items: [
+          { pinyin: "wǒmen", hanzi: "我们", type: "我 + 们", pronunciation: "uo-men", meaning: "Nosotros" },
+          { pinyin: "nǐmen", hanzi: "你们", type: "你 + 们", pronunciation: "ni-men", meaning: "Ustedes" },
+          { pinyin: "tāmen", hanzi: "他们", type: "他 + 们", pronunciation: "ta-men", meaning: "Ellos" },
+          { pinyin: "tāmen", hanzi: "她们", type: "她 + 们", pronunciation: "ta-men", meaning: "Ellas" },
+          { pinyin: "tāmen", hanzi: "它们", type: "它 + 们", pronunciation: "ta-men", meaning: "Ellos / Ellas (para cosas o animales)" }
+        ]
+      },
+      {
+        title: "3. ¿De qué país sos? — 哪国人",
+        description: "Las oraciones de la slide: el verbo 是 (ser) une al sujeto con lo que es.",
+        items: [
+          { pinyin: "Nǐ shì nǎ guó rén?", hanzi: "你是哪国人？", type: "Pregunta", pronunciation: "ni shi na guo ren", meaning: "¿De qué país sos?" },
+          { pinyin: "Tā shì nǎ guó rén?", hanzi: "他是哪国人？", type: "Pregunta", pronunciation: "ta shi na guo ren", meaning: "¿De qué país es él?" },
+          { pinyin: "Tā shì Zhōngguó rén.", hanzi: "他是中国人。", type: "Respuesta", pronunciation: "ta shi chong-guo ren", meaning: "Él es chino" },
+          { pinyin: "Tā shì wǒ māma.", hanzi: "她是我妈妈。", type: "Presentar a alguien", pronunciation: "ta shi uo ma-ma", meaning: "Ella es mi mamá" },
+          { pinyin: "nǎ + guó + rén", hanzi: "哪 + 国 + 人", type: "Desarmado", pronunciation: "cuál + país + persona", meaning: "Persona de qué país" }
+        ]
+      },
+      {
+        title: "4. Orden de la oración — Sujeto + Verbo + Objeto",
+        description: "Igual que en castellano, y el verbo no se conjuga.",
+        items: [
+          { pinyin: "Wǒ chī píngguǒ.", hanzi: "我吃苹果。", type: "Ejemplo", pronunciation: "uo chi ping-guo", meaning: "Yo como manzana" },
+          { pinyin: "wǒ", hanzi: "我", type: "Sujeto", pronunciation: "uo", meaning: "Yo" },
+          { pinyin: "chī", hanzi: "吃", type: "Verbo", pronunciation: "chi (1er tono)", meaning: "Comer" },
+          { pinyin: "píngguǒ", hanzi: "苹果", type: "Objeto", pronunciation: "ping-guo (2do + 3er tono)", meaning: "Manzana" }
+        ]
+      },
+      {
+        title: "5. La familia — Padres e hijos",
+        description: "Guía útil HSK 1.",
+        items: [
+          { pinyin: "bàba", hanzi: "爸爸", type: "Familia", pronunciation: "ba-ba (4to + neutro)", meaning: "Padre / Papá" },
+          { pinyin: "māma", hanzi: "妈妈", type: "Familia", pronunciation: "ma-ma (1er + neutro)", meaning: "Madre / Mamá" },
+          { pinyin: "érzi", hanzi: "儿子", type: "Familia", pronunciation: "ar-ds (2do + neutro)", meaning: "Hijo" },
+          { pinyin: "nǚ'ér", hanzi: "女儿", type: "Familia", pronunciation: "nü-ar (3er + 2do)", meaning: "Hija" }
+        ]
+      },
+      {
+        title: "6. La familia — Hermanos",
+        description: "Se nombran por edad: mayor o menor que vos.",
+        items: [
+          { pinyin: "gēge", hanzi: "哥哥", type: "Mayor", pronunciation: "gue-gue", meaning: "Hermano mayor" },
+          { pinyin: "dìdi", hanzi: "弟弟", type: "Menor", pronunciation: "di-di", meaning: "Hermano menor" },
+          { pinyin: "jiějie", hanzi: "姐姐", type: "Mayor", pronunciation: "llie-llie", meaning: "Hermana mayor" },
+          { pinyin: "mèimei", hanzi: "妹妹", type: "Menor", pronunciation: "mei-mei", meaning: "Hermana menor" }
+        ]
+      },
+      {
+        title: "7. La familia — Abuelos y tíos",
+        items: [
+          { pinyin: "yéye", hanzi: "爷爷", type: "Familia", pronunciation: "ie-ie", meaning: "Abuelo paterno" },
+          { pinyin: "nǎinai", hanzi: "奶奶", type: "Familia", pronunciation: "nai-nai", meaning: "Abuela paterna" },
+          { pinyin: "shūshu", hanzi: "叔叔", type: "Familia", pronunciation: "shu-shu", meaning: "Tío" },
+          { pinyin: "āyí", hanzi: "阿姨", type: "Familia", pronunciation: "a-i", meaning: "Tía" }
+        ]
+      },
+      {
+        title: "8. Pareja",
+        description: "Esposo y esposa tienen dos formas cada uno.",
+        items: [
+          { pinyin: "zhàngfu", hanzi: "丈夫", type: "Esposo", pronunciation: "chang-fu", meaning: "Esposo" },
+          { pinyin: "lǎogōng", hanzi: "老公", type: "Esposo", pronunciation: "lao-gung", meaning: "Esposo" },
+          { pinyin: "qīzi", hanzi: "妻子", type: "Esposa", pronunciation: "chi-ds", meaning: "Esposa" },
+          { pinyin: "lǎopo", hanzi: "老婆", type: "Esposa", pronunciation: "lao-po", meaning: "Esposa" },
+          { pinyin: "nánpéngyou", hanzi: "男朋友", type: "Pareja", pronunciation: "nan-pong-iou", meaning: "Novio" },
+          { pinyin: "nǚpéngyou", hanzi: "女朋友", type: "Pareja", pronunciation: "nü-pong-iou", meaning: "Novia" }
+        ]
+      },
+      {
+        title: "9. Saludos útiles",
+        items: [
+          { pinyin: "nǐ hǎo", hanzi: "你好", type: "Saludo", pronunciation: "ni hao", meaning: "Hola" },
+          { pinyin: "huānyíng nǐ", hanzi: "欢迎你", type: "Saludo", pronunciation: "juan-ing ni", meaning: "Bienvenido / Bienvenida" },
+          { pinyin: "zàijiàn", hanzi: "再见", type: "Despedida", pronunciation: "dsai-llien", meaning: "Adiós / Hasta luego" },
+          { pinyin: "xièxie", hanzi: "谢谢", type: "Cortesía", pronunciation: "shie-shie", meaning: "Gracias" }
+        ]
+      }
+    ],
+    grammar_tips: [
+      "您 (nín) es el «usted»: se usa con profesores y personas mayores. Es 你 con 心 (corazón) abajo.",
+      "他们 / 她们 / 它们 suenan igual (tāmen). 它们 es el plural para animales y cosas.",
+      "是 (shì) = ser. Une dos cosas y no se conjuga: 我是, 他是, 我们是.",
+      "La palabra de pregunta va donde iría la respuesta: 你是哪国人？ → 他是中国人。",
+      "Con la familia cercana, el pronombre va pegado: 我妈妈 = mi mamá, 我哥哥 = mi hermano mayor.",
+      "Orden fijo: sujeto + verbo + objeto (我吃苹果). Si cambiás el orden, cambia el significado: 苹果吃我 = la manzana me come.",
+      "Los hermanos se nombran por edad: 哥哥 / 弟弟 (varones), 姐姐 / 妹妹 (mujeres). Los que llevan 女 a la izquierda son mujeres.",
+      "En los familiares con caracter repetido (爸爸, 妈妈, 哥哥…) la segunda sílaba va en tono neutro."
     ]
   }
 ];
