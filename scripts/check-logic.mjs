@@ -20,6 +20,8 @@ const sources = [
   "src/lib/practice.ts",
   "src/data/lessons.ts",
   "src/data/sentences.ts",
+  "src/lib/tones.ts",
+  "src/lib/typing.ts",
 ];
 try {
   execFileSync(
@@ -36,6 +38,13 @@ try {
     process.exit(1);
   }
 }
+
+// typing.ts importa tones y lessons por alias: mismo truco.
+const typingPath = path.join(out, "lib", "typing.js");
+fs.writeFileSync(
+  typingPath,
+  fs.readFileSync(typingPath, "utf8").replace(/"@\/lib\/tones"/g, '"./tones.js"').replace(/"@\/data\/lessons"/g, '"../data/lessons.js"')
+);
 
 // El alias "@/lib/review" no existe en node: se reescribe al archivo de al lado.
 const practicePath = path.join(out, "lib", "practice.js");
@@ -55,6 +64,7 @@ const N = await import(pathToFileURL(path.join(out, "lib", "numbers.js")));
 const R = await import(pathToFileURL(path.join(out, "lib", "review.js")));
 const P = await import(pathToFileURL(practicePath));
 const L = await import(pathToFileURL(path.join(out, "data", "lessons.js")));
+const T = await import(pathToFileURL(typingPath));
 const S = await import(pathToFileURL(path.join(out, "data", "sentences.js")));
 
 let failed = 0;
@@ -212,10 +222,33 @@ for (const set of S.SUBSTITUTION_SETS) {
   check(`${set.id}: el pool alcanza para los distractores`, worst >= DISTRACTORS, `mínimo ${worst}`);
 }
 
+// ---------------------------------------------------------------- tipeo de pinyin
+const CONVERT = {
+  "ni3": "nǐ", "ni3 hao3": "nǐ hǎo", "ni3hao3": "nǐhǎo", "xie4xie5": "xièxie", "lv4": "lǜ", "nv3": "nǚ",
+  "liu4": "liù", "gui4": "guì", "shen2me": "shénme", "zhong1guo2": "zhōngguó", "NI3": "nǐ", "nǐ hǎo": "nǐ hǎo",
+  "ma1ma5": "māma", "wo3men5": "wǒmen",
+};
+for (const [raw, want] of Object.entries(CONVERT)) {
+  check(`tipeo «${raw}»`, T.convertInput(raw) === want, `dio ${T.convertInput(raw)}`);
+}
+check("tipeo: idempotente", T.convertInput(T.convertInput("ni3 hao3")) === "nǐ hǎo");
+check("tipeo: espacios no importan", T.isCorrect("nǐhǎo", "Nǐ hǎo"));
+check("tipeo: puntuación no importa", T.isCorrect("nǐ jiào shénme míngzi", "Nǐ jiào shénme míngzi?"));
+check("tipeo: el tono importa", !T.isCorrect("ni hao", "nǐ hǎo"));
+check("tipeo: tono equivocado no pasa", !T.isCorrect("ní hǎo", "nǐ hǎo"));
+const typing = T.typingItems();
+check("tipeo: hay vocabulario", typing.length >= 30, `${typing.length}`);
+check("tipeo: sin hanzi repetidos", new Set(typing.map((i) => i.hanzi)).size === typing.length);
+for (const it of typing) {
+  check(`tipeo ${it.hanzi}: el pinyin se puede tipear`,
+    /^[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü' ]+$/.test(it.pinyin), it.pinyin);
+}
+check("tipeo: cada clase con vocabulario tiene items", T.typingLessons().every((n) => T.typingItems(n).length > 0));
+
 fs.rmSync(out, { recursive: true, force: true });
 
 if (failed) {
   console.error(`\n${failed} verificaciones fallaron`);
   process.exit(1);
 }
-console.log(`check-logic: ${total} verificaciones OK (números, repaso espaciado, datos de clases)`);
+console.log(`check-logic: ${total} verificaciones OK (números, repaso espaciado, datos de clases, tipeo)`);

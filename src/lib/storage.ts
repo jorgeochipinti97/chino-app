@@ -8,6 +8,7 @@ const STORAGE_KEYS = {
   TONE_BEST: "chino_app_tone_best_v1",
   NUMBER_BEST: "chino_app_number_best_v1",
   SENTENCE_BEST: "chino_app_sentence_best_v1",
+  TYPING_BEST: "chino_app_typing_best_v1",
 };
 
 const DEFAULT_USER: StudentScore = {
@@ -205,4 +206,29 @@ export function saveSentenceBest(setId: string, score: number): number {
     // sin persistencia: el puntaje igual se muestra en la sesión
   }
   return score;
+}
+
+/** Mejor velocidad (palabras por minuto) del tipeo de pinyin, por clase o "all". */
+export function getTypingBest(key: string): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.TYPING_BEST);
+    return data ? (JSON.parse(data) as Record<string, number>)[key] || 0 : 0;
+  } catch {
+    return 0;
+  }
+}
+
+export function saveTypingBest(key: string, wpm: number): number {
+  const current = getTypingBest(key);
+  if (wpm <= current) return current;
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.TYPING_BEST);
+    const parsed = data ? (JSON.parse(data) as Record<string, number>) : {};
+    parsed[key] = wpm;
+    localStorage.setItem(STORAGE_KEYS.TYPING_BEST, JSON.stringify(parsed));
+  } catch {
+    // sin persistencia: el récord igual se muestra en la sesión
+  }
+  return wpm;
 }

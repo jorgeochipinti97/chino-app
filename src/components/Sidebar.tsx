@@ -17,6 +17,7 @@ import {
   Ear,
   Hash,
   MessageSquare,
+  Keyboard,
   LucideIcon,
 } from "lucide-react";
 import { LESSON_MATERIALS, INITIAL_QUIZZES } from "@/data/lessons";
@@ -100,6 +101,17 @@ const PRACTICE_NAV: NavItem[] = [
     idleIcon: "text-orange-500",
     activeBadge: "bg-white/20 text-white",
     idleBadge: "bg-orange-500/15 text-orange-500",
+  },
+  {
+    href: "/tipeo",
+    label: "Tipeo",
+    icon: Keyboard,
+    badge: "打字",
+    chineseBadge: true,
+    activeBg: "bg-teal-500 text-white shadow-apple-glow",
+    idleIcon: "text-teal-500",
+    activeBadge: "bg-white/20 text-white",
+    idleBadge: "bg-teal-500/15 text-teal-500",
   },
 ];
 
