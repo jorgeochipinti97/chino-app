@@ -750,6 +750,307 @@ export const INITIAL_QUIZZES: QuizData[] = [
         pinyin: "āyí"
       }
     ]
+  },
+  {
+    "id": "clase-06",
+    "lesson_number": 6,
+    "title": "Quiz - Clase 6 de Chino",
+    "description": "Armar oraciones sujeto + verbo + objeto, preguntar con 吗, contar con los clasificadores 个 y 只 y la pronunciación de los lugares, la comida y los verbos.",
+    "total_questions": 22,
+    "questions": [
+      {
+        "id": 1,
+        "question": "¿Cómo se dice «Él va a la escuela»?",
+        "options": [
+          "他去学校",
+          "他学校去",
+          "去他学校",
+          "学校去他"
+        ],
+        "correct_answer": "他去学校",
+        "explanation": "Sujeto + verbo + objeto: 他 (él) + 去 (va) + 学校 (escuela). El lugar va directo después de 去."
+      },
+      {
+        "id": 2,
+        "question": "¿Cómo se dice «Yo quiero comer arroz»?",
+        "options": [
+          "我要吃米饭",
+          "我吃要米饭",
+          "我米饭要吃",
+          "要我吃米饭"
+        ],
+        "correct_answer": "我要吃米饭",
+        "explanation": "要 (querer) va antes del verbo que querés hacer: 要吃 = querer comer. Después, el objeto: 米饭."
+      },
+      {
+        "id": 3,
+        "question": "Completá: 我 ___ 苹果 (Yo compro manzanas)",
+        "options": [
+          "买",
+          "去",
+          "有",
+          "看"
+        ],
+        "correct_answer": "买",
+        "explanation": "买 (mǎi) = comprar. 去 = ir, 有 = tener, 看 = mirar."
+      },
+      {
+        "id": 4,
+        "question": "¿Cómo preguntás «¿Querés café?»",
+        "options": [
+          "你要咖啡吗？",
+          "吗你要咖啡？",
+          "你吗要咖啡？",
+          "你要吗咖啡？"
+        ],
+        "correct_answer": "你要咖啡吗？",
+        "explanation": "Se toma la afirmación 你要咖啡 y se agrega 吗 al final. Nada más se mueve."
+      },
+      {
+        "id": 5,
+        "question": "¿Qué cambia entre 他去学校 y 他去学校吗？",
+        "options": [
+          "Solo se agrega 吗 al final",
+          "El verbo pasa al final",
+          "El sujeto pasa al final",
+          "Se agrega 很"
+        ],
+        "correct_answer": "Solo se agrega 吗 al final",
+        "explanation": "Para preguntar sí/no alcanza con 吗 al final: el orden sujeto + verbo + objeto no cambia.",
+        "hanzi": "他去学校吗？",
+        "pinyin": "Tā qù xuéxiào ma?"
+      },
+      {
+        "id": 6,
+        "question": "¿Qué significa 你要吃米饭吗？",
+        "options": [
+          "¿Querés comer arroz?",
+          "Yo quiero comer arroz",
+          "¿Comiste arroz?",
+          "Vos comés arroz"
+        ],
+        "correct_answer": "¿Querés comer arroz?",
+        "explanation": "你 (vos) + 要吃 (querer comer) + 米饭 (arroz) + 吗 (pregunta).",
+        "hanzi": "你要吃米饭吗？",
+        "pinyin": "Nǐ yào chī mǐfàn ma?"
+      },
+      {
+        "id": 7,
+        "question": "¿Qué significa 看 (kàn)?",
+        "options": [
+          "Mirar / Ver / Leer",
+          "Comer",
+          "Comprar",
+          "Tener"
+        ],
+        "correct_answer": "Mirar / Ver / Leer",
+        "explanation": "看 = mirar, ver o leer. 吃 = comer, 买 = comprar, 有 = tener.",
+        "hanzi": "看",
+        "pinyin": "kàn"
+      },
+      {
+        "id": 8,
+        "question": "¿Qué significa 饭馆 (fànguǎn)?",
+        "options": [
+          "Restaurante",
+          "Hospital",
+          "Tienda",
+          "Casa"
+        ],
+        "correct_answer": "Restaurante",
+        "explanation": "饭馆 = restaurante. 医院 = hospital, 商店 = tienda, 家 = casa.",
+        "hanzi": "饭馆",
+        "pinyin": "fànguǎn"
+      },
+      {
+        "id": 9,
+        "question": "Escuchalo: ¿cómo se lee 学校?",
+        "options": [
+          "xuéxiào",
+          "xuēxiāo",
+          "xuěxiào",
+          "xuèxiǎo"
+        ],
+        "correct_answer": "xuéxiào",
+        "explanation": "2do tono + 4to tono: xué (sube) xiào (cae).",
+        "hanzi": "学校",
+        "pinyin": "xuéxiào"
+      },
+      {
+        "id": 10,
+        "question": "Escuchalo: ¿cómo se lee 商店?",
+        "options": [
+          "shāngdiàn",
+          "shàngdiān",
+          "shǎngdián",
+          "shángdiǎn"
+        ],
+        "correct_answer": "shāngdiàn",
+        "explanation": "1er tono + 4to tono: shāng (alto y plano) diàn (cae).",
+        "hanzi": "商店",
+        "pinyin": "shāngdiàn"
+      },
+      {
+        "id": 11,
+        "question": "Escuchalo: ¿cómo se lee 医院?",
+        "options": [
+          "yīyuàn",
+          "yíyuǎn",
+          "yìyuán",
+          "yǐyuàn"
+        ],
+        "correct_answer": "yīyuàn",
+        "explanation": "1er tono + 4to tono: yī (alto y plano) yuàn (cae).",
+        "hanzi": "医院",
+        "pinyin": "yīyuàn"
+      },
+      {
+        "id": 12,
+        "question": "Escuchalo: ¿cómo se lee 汉堡?",
+        "options": [
+          "hànbǎo",
+          "hānbáo",
+          "hǎnbào",
+          "hánbāo"
+        ],
+        "correct_answer": "hànbǎo",
+        "explanation": "4to tono + 3er tono: hàn (cae) bǎo (baja y remonta).",
+        "hanzi": "汉堡",
+        "pinyin": "hànbǎo"
+      },
+      {
+        "id": 13,
+        "question": "Escuchalo: ¿qué tono tiene 茶 (té)?",
+        "options": [
+          "chá (2do tono)",
+          "chā (1er tono)",
+          "chǎ (3er tono)",
+          "chà (4to tono)"
+        ],
+        "correct_answer": "chá (2do tono)",
+        "explanation": "茶 = chá, 2do tono: sube como una pregunta.",
+        "hanzi": "茶",
+        "pinyin": "chá"
+      },
+      {
+        "id": 14,
+        "question": "Escuchalo: ¿qué tono tiene 去 (ir)?",
+        "options": [
+          "qù (4to tono)",
+          "qū (1er tono)",
+          "qú (2do tono)",
+          "qǔ (3er tono)"
+        ],
+        "correct_answer": "qù (4to tono)",
+        "explanation": "去 = qù, 4to tono: cae fuerte. Ojo: la q suena parecido a «ch».",
+        "hanzi": "去",
+        "pinyin": "qù"
+      },
+      {
+        "id": 15,
+        "question": "Escuchalo: ¿cómo se lee 米饭?",
+        "options": [
+          "mǐfàn",
+          "mīfán",
+          "mífǎn",
+          "mìfān"
+        ],
+        "correct_answer": "mǐfàn",
+        "explanation": "3er tono + 4to tono: mǐ (baja) fàn (cae).",
+        "hanzi": "米饭",
+        "pinyin": "mǐfàn"
+      },
+        {
+          "id": 16,
+          "question": "¿Cómo se dice «tres personas»?",
+          "options": [
+            "三个人",
+            "三人个",
+            "个三人",
+            "人三个"
+          ],
+          "correct_answer": "三个人",
+          "explanation": "Número + clasificador + sustantivo: 三 (tres) + 个 + 人 (persona)."
+        },
+        {
+          "id": 17,
+          "question": "¿Dónde va el clasificador?",
+          "options": [
+            "Entre el número y el sustantivo",
+            "Después del sustantivo",
+            "Antes del número",
+            "Al final de la oración"
+          ],
+          "correct_answer": "Entre el número y el sustantivo",
+          "explanation": "Siempre en el medio: 五个苹果 = cinco + 个 + manzanas."
+        },
+        {
+          "id": 18,
+          "question": "Completá: 我有五 ___ 苹果 (Tengo cinco manzanas)",
+          "options": [
+            "个",
+            "们",
+            "吗",
+            "很"
+          ],
+          "correct_answer": "个",
+          "explanation": "Para contar hace falta el clasificador: 五个苹果."
+        },
+        {
+          "id": 19,
+          "question": "¿Cómo se dice «Yo tengo un perro»?",
+          "options": [
+            "我有一只狗",
+            "我有只一狗",
+            "我一只有狗",
+            "我有一狗只"
+          ],
+          "correct_answer": "我有一只狗",
+          "explanation": "我 (yo) + 有 (tengo) + 一 (un) + 只 (clasificador) + 狗 (perro)."
+        },
+        {
+          "id": 20,
+          "question": "En 我有一只狗, ¿qué es 只?",
+          "options": [
+            "La palabra de medida para animales",
+            "La palabra «perro»",
+            "El verbo «tener»",
+            "El número «uno»"
+          ],
+          "correct_answer": "La palabra de medida para animales",
+          "explanation": "只 (zhī) es el clasificador de animales: va entre el número 一 y el sustantivo 狗.",
+          "hanzi": "我有一只狗",
+          "pinyin": "Wǒ yǒu yī zhī gǒu"
+        },
+        {
+          "id": 21,
+          "question": "Escuchalo: ¿qué tono tiene 个 en el diccionario?",
+          "options": [
+            "gè (4to tono)",
+            "gē (1er tono)",
+            "gé (2do tono)",
+            "gě (3er tono)"
+          ],
+          "correct_answer": "gè (4to tono)",
+          "explanation": "个 = gè, 4to tono. Dentro de la frase suele sonar neutro: 三个 sān ge.",
+          "hanzi": "个",
+          "pinyin": "gè"
+        },
+        {
+          "id": 22,
+          "question": "Escuchalo: ¿cómo suena el 一 en 一个?",
+          "options": [
+            "yí (2do tono)",
+            "yī (1er tono)",
+            "yǐ (3er tono)",
+            "yì (4to tono)"
+          ],
+          "correct_answer": "yí (2do tono)",
+          "explanation": "Se escribe yī, pero delante de un 4to tono suena yí, y 个 originalmente lo es.",
+          "hanzi": "一个",
+          "pinyin": "yí ge"
+        }
+    ]
   }
 ];
 
@@ -1627,6 +1928,91 @@ export const LESSON_MATERIALS: LessonMaterial[] = [
       "Orden fijo: sujeto + verbo + objeto (我吃苹果). Si cambiás el orden, cambia el significado: 苹果吃我 = la manzana me come.",
       "Los hermanos se nombran por edad: 哥哥 / 弟弟 (varones), 姐姐 / 妹妹 (mujeres). Los que llevan 女 a la izquierda son mujeres.",
       "En los familiares con caracter repetido (爸爸, 妈妈, 哥哥…) la segunda sílaba va en tono neutro."
+    ]
+  },
+  {
+    id: "mat-clase-06",
+    lesson_number: 6,
+    title: "Clase 6: Armar oraciones — sujeto + verbo + objeto y clasificadores",
+    summary: "El predicado verbal (sujeto + verbo + objeto) con lugares, comida y bebidas y cinco verbos nuevos, cómo convertir una oración en pregunta agregando 吗 al final y los clasificadores 个 y 只 para contar.",
+    sections: [
+      {
+        title: "1. Sujeto + Verbo + Objeto",
+        description: "El ejemplo de la slide. Sin 很, la pregunta se arma agregando 吗 al final.",
+        items: [
+          { pinyin: "Nǐ yào kāfēi.", hanzi: "你要咖啡。", type: "Afirmación", pronunciation: "ni iao ka-fei", meaning: "Vos querés café" },
+          { pinyin: "Nǐ yào kāfēi ma?", hanzi: "你要咖啡吗？", type: "Pregunta", pronunciation: "ni iao ka-fei ma", meaning: "¿Querés café?" },
+          { pinyin: "yào", hanzi: "要", type: "Verbo", pronunciation: "iao (4to tono)", meaning: "Querer" }
+        ]
+      },
+      {
+        title: "2. Lugares",
+        items: [
+          { pinyin: "xuéxiào", hanzi: "学校", type: "Lugar", pronunciation: "shue-shiao (2do + 4to)", meaning: "Escuela / colegio" },
+          { pinyin: "fànguǎn", hanzi: "饭馆", type: "Lugar", pronunciation: "fan-guan (4to + 3er)", meaning: "Restaurante" },
+          { pinyin: "shāngdiàn", hanzi: "商店", type: "Lugar", pronunciation: "shang-dien (1er + 4to)", meaning: "Tienda" },
+          { pinyin: "yīyuàn", hanzi: "医院", type: "Lugar", pronunciation: "i-iuen (1er + 4to)", meaning: "Hospital" },
+          { pinyin: "jiā", hanzi: "家", type: "Lugar", pronunciation: "llia (1er tono)", meaning: "Casa / Hogar" }
+        ]
+      },
+      {
+        title: "3. Comida y bebidas",
+        items: [
+          { pinyin: "mǐfàn", hanzi: "米饭", type: "Comida", pronunciation: "mi-fan (3er + 4to)", meaning: "Arroz cocido" },
+          { pinyin: "píngguǒ", hanzi: "苹果", type: "Comida", pronunciation: "ping-guo (2do + 3er)", meaning: "Manzana" },
+          { pinyin: "kāfēi", hanzi: "咖啡", type: "Bebida", pronunciation: "ka-fei (1er + 1er)", meaning: "Café" },
+          { pinyin: "chá", hanzi: "茶", type: "Bebida", pronunciation: "cha (2do tono)", meaning: "Té" },
+          { pinyin: "hànbǎo", hanzi: "汉堡", type: "Comida", pronunciation: "jan-bao (4to + 3er)", meaning: "Hamburguesa" }
+        ]
+      },
+      {
+        title: "4. Verbos",
+        description: "No se conjugan: 我去, 他去, 我们去.",
+        items: [
+          { pinyin: "yǒu", hanzi: "有", type: "Verbo", pronunciation: "iou (3er tono)", meaning: "Tener / Haber" },
+          { pinyin: "qù", hanzi: "去", type: "Verbo", pronunciation: "chü (4to tono)", meaning: "Ir" },
+          { pinyin: "mǎi", hanzi: "买", type: "Verbo", pronunciation: "mai (3er tono)", meaning: "Comprar" },
+          { pinyin: "chī", hanzi: "吃", type: "Verbo", pronunciation: "chi (1er tono)", meaning: "Comer" },
+          { pinyin: "kàn", hanzi: "看", type: "Verbo", pronunciation: "kan (4to tono)", meaning: "Mirar / Ver / Leer" }
+        ]
+      },
+      {
+        title: "5. Ejemplos de la clase",
+        description: "Cada afirmación con su pregunta: mismo orden + 吗.",
+        items: [
+          { pinyin: "Wǒ yào chī mǐfàn.", hanzi: "我要吃米饭。", type: "Afirmación", pronunciation: "uo iao chi mi-fan", meaning: "Yo quiero comer arroz" },
+          { pinyin: "Nǐ yào chī mǐfàn ma?", hanzi: "你要吃米饭吗？", type: "Pregunta", pronunciation: "ni iao chi mi-fan ma", meaning: "¿Querés comer arroz?" },
+          { pinyin: "Tā qù xuéxiào.", hanzi: "他去学校。", type: "Afirmación", pronunciation: "ta chü shue-shiao", meaning: "Él va a la escuela" },
+          { pinyin: "Tā qù xuéxiào ma?", hanzi: "他去学校吗？", type: "Pregunta", pronunciation: "ta chü shue-shiao ma", meaning: "¿Él va a la escuela?" }
+        ]
+      },
+      {
+        title: "6. Clasificadores — 个 y 只",
+        description: "Entre el número y el sustantivo va una palabra de medida. 个 es la universal; 只 se usa con animales.",
+        items: [
+          { pinyin: "gè", hanzi: "个", type: "Clasificador universal", pronunciation: "gue (4to tono; en la frase suele sonar neutro)", meaning: "Palabra de medida universal" },
+          { pinyin: "zhī", hanzi: "只", type: "Clasificador de animales", pronunciation: "chi (1er tono)", meaning: "Palabra de medida para animales" },
+          { pinyin: "gǒu", hanzi: "狗", type: "Animal", pronunciation: "gou (3er tono)", meaning: "Perro" },
+          { pinyin: "Wǒ yǒu yī zhī gǒu.", hanzi: "我有一只狗。", type: "Ejemplo de la slide", pronunciation: "uo iou i chi gou (一 suena yì)", meaning: "Yo tengo un perro" },
+          { pinyin: "yī ge píngguǒ", hanzi: "一个苹果", type: "Número + 个 + sustantivo", pronunciation: "i gue ping-guo (一 suena yí)", meaning: "Una manzana" },
+          { pinyin: "sān ge rén", hanzi: "三个人", type: "Número + 个 + sustantivo", pronunciation: "san gue ren", meaning: "Tres personas" },
+          { pinyin: "Wǒ yǒu wǔ ge píngguǒ.", hanzi: "我有五个苹果。", type: "En una oración", pronunciation: "uo iou u gue ping-guo", meaning: "Tengo cinco manzanas" },
+          { pinyin: "Wǒ qù yī ge xuéxiào.", hanzi: "我去一个学校。", type: "一个 = un / una", pronunciation: "uo chü i gue shue-shiao (一 suena yí)", meaning: "Yo voy a una escuela" },
+          { pinyin: "Wǒ qù yī ge yīyuàn.", hanzi: "我去一个医院。", type: "一个 = un / una", pronunciation: "uo chü i gue i-iuen (一 suena yí)", meaning: "Yo voy a un hospital" }
+        ]
+      }
+    ],
+    grammar_tips: [
+      "Orden fijo: sujeto + verbo + objeto. 他去学校 = él + va + escuela.",
+      "Con 去 (ir) el lugar va directo después del verbo, sin «a»: 去学校 = ir a la escuela.",
+      "Para preguntar «sí o no» se agrega 吗 al final y el orden no cambia: 他去学校 → 他去学校吗？",
+      "要 + verbo = querer hacer algo: 我要吃米饭 (quiero comer arroz). 要 + cosa = querer algo: 你要咖啡.",
+      "Los verbos no se conjugan: 我吃, 你吃, 他们吃.",
+      "Para contar: número + clasificador + sustantivo. 一只狗 = uno + 只 + perro.",
+      "个 (gè) es el clasificador universal: sirve para personas y muchas cosas. Con animales se usa 只 (zhī).",
+      "一 se escribe yī, pero cambia al hablar: suena yí delante de un 4to tono (一个) y yì delante de un 1er tono (一只).",
+      "一个 funciona como «un / una»: 我去一个学校 = voy a una escuela. Sin 一个, 我去学校 ya se entiende como «voy a la escuela».",
+      "Para «dos» se cuenta con 两, no con 二: 两个人."
     ]
   }
 ];
